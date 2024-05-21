@@ -5,32 +5,6 @@ import re
 import subprocess
 from subprocess import check_output, CalledProcessError
 
-RCON_COMMAND = ["rcon", "-a", "127.0.0.1:" + config.rcon_port, "-p", config.rcon_password]
-
-#======================================================================================================================
-def execute_adduser(name,password):
-
-    zomboidCommand = [f"adduser \"{name}\" {password}"]
-    return execute_command(RCON_COMMAND + zomboidCommand, f"Adding user name={name}")
-
-#======================================================================================================================
-def execute_banid(steam_id):
-
-    zomboidCommand = [f"banid {steam_id}"]
-    return execute_command(RCON_COMMAND + zomboidCommand, f"Banning steam ID={steam_id}")
-
-#======================================================================================================================
-def execute_unbanid(steam_id):
-
-    zomboidCommand = [f"unbanid {steam_id}"]
-    return execute_command(RCON_COMMAND + zomboidCommand, f"Unbanning steam ID={steam_id}")
-
-#======================================================================================================================
-def execute_pzkick(user):
-
-    zomboidCommand = [f"kickuser {user}"]
-    return execute_command(RCON_COMMAND + zomboidCommand, f"Kicking user={user}")
-
 #======================================================================================================================
 async def execute_sendMessage(message, bot):
 
