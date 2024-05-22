@@ -1,0 +1,17 @@
+[Unit]
+Description=Project Zomboid Server
+StartLimitIntervalSec=300
+StartLimitBurst=2
+OnFailure=apa_notify.service
+
+[Service]
+Type=forking
+#These need to be updated
+WorkingDirectory=/home/apathabove
+#ExecStart=/home/apathabove/pz-lgsm/pzserver start
+#ExecStop=/home/apathabove/pz-lgsm/pzserver stop
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -191,3 +191,21 @@ async def on_ready():
 #======================================================================================================================
 if __name__ == "__main__":
     bot.run(os.getenv('TOKEN'))
+
+
+
+#for reference
+#======================================================================================================================
+#async def execute_sendMessage(message, bot):
+
+#    channel = bot.get_channel(1116144081987448893)
+
+#    await channel.send(message)
+
+#    try:
+#        p = subprocess.Popen(["pzserver", "send", f"servermsg \"{message}\""], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+#        output, errors = p.communicate()
+#    except CalledProcessError:
+#        print(f"{errors}")
+
+#    print(f"{output}")

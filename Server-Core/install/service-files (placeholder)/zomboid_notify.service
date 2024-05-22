@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs the notify script to gather info and send it to discord.
+
+[Service]
+#These need to be updated
+#WorkingDirectory=/home/apathabove/scripts
+#ExecStart=/home/apathabove/scripts/apa_notify.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=Runs the apa bus stop teleporter script
+
+[Service]
+#These need to be updated
+#WorkingDirectory=/home/apathabove/scripts/apa_log_skimmer
+RestartSec=5
+Restart=always
+#ExecStart=/usr/bin/python3 -u /home/apathabove/scripts/apa_log_skimmer/teleporter.py
+#StandardOutput=truncate:/home/apathabove/scripts/apa_log_skimmer/teleport_out.log
+#StandardError=truncate:/home/apathabove/scripts/apa_log_skimmer/teleport_error.log
+
+[Install]
+WantedBy=multi-user.target

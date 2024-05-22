@@ -1,0 +1,12 @@
+[Install]
+WantedBy=timers.target
+
+[Unit]
+Description=pzserver restart, backup, and modupdate script.
+
+[Service]
+#These need to be updated
+#ExecStart=/home/apathabove/scripts/apa_reboot.sh
+
+[Install]
+WantedBy=multi-user.target

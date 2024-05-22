@@ -1,6 +1,6 @@
 from subprocess import run, PIPE, check_output, CalledProcessError
 
-class lgsm_commands:
+class zomboid_commands:
     def __init__(self, name=None, password=None, steam_id=None, message=None, item=None):
         self.name = name
         self.password = password
@@ -10,44 +10,44 @@ class lgsm_commands:
 
     def add_user(self):
         if self.name and self.password:
-            self.execute([f"adduser \"{self.name}\" {self.password}"])
+            self.lgsm_passthrough([f"adduser \"{self.name}\" {self.password}"])
     
     def ban_id(self):
         if self.steam_id:
-            self.execute([f"banid {self.steam_id}"])
+            self.lgsm_passthrough([f"banid {self.steam_id}"])
     
     def unban_id(self):
         if self.steam_id:
-            self.execute([f"unbanid {self.steam_id}"])
+            self.lgsm_passthrough([f"unbanid {self.steam_id}"])
 
     def kick_user(self):
         if self.name:
-            self.execute([f"kickuser {self.name}"])
+            self.lgsm_passthrough([f"kickuser {self.name}"])
 
     def send_server_message(self):
         if self.message:
-            self.execute([f"servermsg \"{self.message}\""])
+            self.lgsm_passthrough([f"servermsg \"{self.message}\""])
 
     def save_server(self):
-        self.execute(["save-all"])
+        self.lgsm_passthrough(["save-all"])
 
     def reward_participating_players(self):
         if self.name:
-            self.execute([f"additem \"{self.name}\" {self.item}"])
+            self.lgsm_passthrough([f"additem \"{self.name}\" {self.item}"])
 
     def port_player(self, direction):
         if self.name:
-            self.execute([f"portplayer {direction} \"{self.name}\""])
+            self.lgsm_passthrough([f"portplayer {direction} \"{self.name}\""])
 
     def set_access_level(self, accessLevel):
         if self.name:
-            self.execute([f"setaccesslevel \"{self.name}\" {accessLevel}"])
+            self.lgsm_passthrough([f"setaccesslevel \"{self.name}\" {accessLevel}"])
 
     def teleport_to(self, x, y, z):
         if self.name:
-            self.execute([f"teleportto \"{self.name}\" {x},{y},{z}"]) 
+            self.lgsm_passthrough([f"teleportto \"{self.name}\" {x},{y},{z}"]) 
 
-    def lgsm_execute(self, command):
+    def lgsm_passthrough(self, command):
         try:
             result = run(["pzserver", "send", command], stdout=PIPE, check=True, text=True, shell=False, capture_output=True)
             return result.stdout

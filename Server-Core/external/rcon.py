@@ -1,5 +1,5 @@
 from configs import apaconfig
-from subprocess import run, check_output, PIPE, CalledProcessError
+from subprocess import run, PIPE, CalledProcessError
 
 class apa_rcon:
     def __init__(self, IP=apaconfig.local_IP, port=apaconfig.local_port, password=apaconfig.local_password):
