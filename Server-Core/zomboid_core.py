@@ -1,5 +1,6 @@
 from sys import argv
 from time import sleep
+import linux_files
 
 def help():
     print("install <lgsm|sysd|rcon>", "Installs lgsm, rcon, and systemctl files. Optionally you can install each piece individually.")
@@ -43,6 +44,8 @@ def main():
 def installer(service):
     match service:
         case "lgsm":
+            
+            #testing printf 'Y\nY\nN' | ./pzserver install
             print("Do lgsm things")
         case "sysd":
             print("copy sysd files")
