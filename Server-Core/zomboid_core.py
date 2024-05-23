@@ -1,6 +1,6 @@
 from sys import argv
 from time import sleep
-import linux_files
+from discord.external.linux_files import linux_files
 
 def help():
     print("install <lgsm|sysd|rcon>", "Installs lgsm, rcon, and systemctl files. Optionally you can install each piece individually.")
@@ -26,7 +26,6 @@ def main():
                 sleep(5)
                 print("Installing rcon.")
                 installer("rcon")
-
         case "backup": 
             print("backup code")
         case "restart":
@@ -44,11 +43,11 @@ def main():
 def installer(service):
     match service:
         case "lgsm":
-            
-            #testing printf 'Y\nY\nN' | ./pzserver install
-            print("Do lgsm things")
+            linux_files.create_lgsm_folder()
+            linux_files.create_linuxgsm()
+            linux_files.download_pzserver()
         case "sysd":
-            print("copy sysd files")
+            linux_files.create_sysd_folders()
         case "rcon":
             print("Download rcon")
 

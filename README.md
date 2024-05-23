@@ -2,7 +2,7 @@
 
 Core set of utilities and scripts to deploy and service zomboid with [lgsm](https://linuxgsm.com/servers/pzserver/).
 
-##Pre-Requisits
+## Pre-Requisits
 
 Assuming Ubuntu 22
 Add a new user of your choice
@@ -17,7 +17,7 @@ Install prereqs
 sudo dpkg --add-architecture i386; sudo apt update; sudo apt install binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip
 ```
 
-##Usage
+## Usage
 
 Update the config.json file to apply to your system.
 
@@ -31,7 +31,7 @@ Available Commands from the console:
 
 ```bash
 #<required>
-#<required|choose one>
+#<required|choose|one>
 #[Optional]
 #[Optional|Choose|one]
 
