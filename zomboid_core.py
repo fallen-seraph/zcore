@@ -10,10 +10,17 @@ def help():
     print("banparse <file>", "Parses a .txt file formated with each steamid per line.")
 
 def main():
+    if len(argv) < 1:
+        argv[1] = "?"
+
     match argv[1]:
         case "install":
-            if argv[2]:
-                installer(argv[2])
+            if len(argv) > 1:
+                if argv[2] in {"lgsm", "sysd", "rcon"}:
+                    installer(argv[2])
+                else:
+                    print("Unrecognized Switch")
+                    help()
             else:
                 print("Hello, and welcome to the A Path Above computer aided lgsm + Utility installer.")
                 sleep(5)
