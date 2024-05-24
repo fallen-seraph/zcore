@@ -1,27 +1,25 @@
-from sys import argv
+import argparse
 from time import sleep
 from discord.external.linux_files import linux_files
 
-def help():
-    print("install <lgsm|sysd|rcon>", "Installs lgsm, rcon, and systemctl files. Optionally you can install each piece individually.")
-    print("backup", "Initiates a 15 minute reboot with a full backup.")
-    print("restart <optional-message>", "Initiates a 15 minute reboot or stop, optional message.")
-    print("chunk <remove|restore>  <chunk|range> <###_###|x1,y1,x2,y2 <daily|recent>", "Chunk tools, restore defaults to daily backup.")
-    print("banparse <file>", "Parses a .txt file formated with each steamid per line.")
+def cmd_line_args():
+    parser = argparse.ArgumentParser(prog="zomboid_core.py", description="Basic tools available from the command line.")
+    subparsers = parser.add_subparsers(dest="command")
+    parser_install = subparsers.add_parser("install")
+    parser_install.add_argument("--install_target", choices=["lgsm", "sysd", "rcon"], default=None)
+    parser_backup = subparsers.add_parser("backup")
+    parser_restart = subparsers.add_parser("restart")
+    parser_restart.add_argument("--message")
+    parser_chunk = subparsers.add_parser("chunk")
+    parser_ban = subparsers.add_parser("banparse")
+
+    return parser.parse_args()
 
 def main():
-    if len(argv) < 1:
-        argv[1] = "?"
+    args = cmd_line_args()
 
-    match argv[1]:
+    match args.command:
         case "install":
-            if len(argv) > 1:
-                if argv[2] in {"lgsm", "sysd", "rcon"}:
-                    installer(argv[2])
-                else:
-                    print("Unrecognized Switch")
-                    help()
-            else:
                 print("Hello, and welcome to the A Path Above computer aided lgsm + Utility installer.")
                 sleep(5)
                 print("Now beginning the lgsm install. Be prepared to answer questions as needed.")
@@ -50,12 +48,14 @@ def main():
 def installer(service):
     match service:
         case "lgsm":
-            linux_files.create_lgsm_folder()
-            linux_files.create_linuxgsm()
-            linux_files.download_pzserver()
+            print("lgsm")
+            #linux_files.create_lgsm_folder()
+            #linux_files.create_linuxgsm()
+            #linux_files.download_pzserver()
         case "sysd":
-            linux_files.create_sysd_folders()
-            linux_files.deploy_sysd_files()
+            print("sysd")
+            #linux_files.create_sysd_folders()
+            #linux_files.deploy_sysd_files()
         case "rcon":
             print("Download rcon")
 
