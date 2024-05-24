@@ -5,8 +5,7 @@ WantedBy=timers.target
 Description=pzserver restart, backup, and modupdate script.
 
 [Service]
-#These need to be updated
-#ExecStart=/home/apathabove/scripts/apa_reboot.sh
+ExecStart=/usr/bin/python3 ~/Server-Core/tools/tools_restart.py
 
 [Install]
 WantedBy=multi-user.target

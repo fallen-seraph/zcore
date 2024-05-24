@@ -48,6 +48,7 @@ def installer(service):
             linux_files.download_pzserver()
         case "sysd":
             linux_files.create_sysd_folders()
+            linux_files.deploy_sysd_files()
         case "rcon":
             print("Download rcon")
 

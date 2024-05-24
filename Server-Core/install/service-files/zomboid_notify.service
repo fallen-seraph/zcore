@@ -2,9 +2,8 @@
 Description=Runs the notify script to gather info and send it to discord.
 
 [Service]
-#These need to be updated
-#WorkingDirectory=/home/apathabove/scripts
-#ExecStart=/home/apathabove/scripts/apa_notify.sh
+WorkingDirectory=~/Server-Core/tools
+ExecStart=/usr/bin/python3 ~/Server-Core/tools/tools_report.py
 
 [Install]
 WantedBy=multi-user.target

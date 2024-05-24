@@ -2,9 +2,8 @@
 Description=timer to run the reboot service
 
 [Timer]
-#place holder for now
 OnCalendar=*:0,10,20,30,40,50
-#Unit=apa_reboot.service
+Unit=zomboid_reboot.service
 
 [Install]
 WantedBy=timers.target

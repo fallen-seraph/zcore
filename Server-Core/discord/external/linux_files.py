@@ -1,6 +1,8 @@
 from subprocess import run, PIPE, CalledProcessError
 from pathlib import Path,PurePosixPath
 from requests import get
+from shutil import copy2
+from os import scandir
 
 class linux_files:
     def __init__(self):
@@ -30,7 +32,7 @@ class linux_files:
 
         try:
             open(file, 'w').write(
-                get('https://linuxgsm.sh').text)
+                get("https://linuxgsm.sh").text)
             try:
                 result = run(["bash", "linuxgsm.sh", "pzserver"]
                              , cwd=self.__pzlgsm, check=True, text=True
@@ -50,3 +52,10 @@ class linux_files:
 
     def create_sysd_folders(self):
         Path(self.__systemctlPath).mkdir(parents=True, exist_ok=True)
+
+    def deploy_sysd_files(self):
+        path = PurePosixPath("~/Server-Core/install/services-files")
+        files = [x.name for x in scandir(path) if x.is_file()]
+
+        for x in files:
+            copy2(f"{path}/{x}", self.__systemctlPath)
