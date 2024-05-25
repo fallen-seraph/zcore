@@ -26,7 +26,7 @@ def DeploySysdFiles():
         run(["loginctl", "enable-linger"], check=True, text=True,
             shell=False)
         
-        run(["systemctl", "--user", "reload-daemon"], check=True, text=True,
+        run(["systemctl", "--user", "daemon-reload"], check=True, text=True,
             shell=False)
         
         for x in files:
