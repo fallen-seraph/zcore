@@ -1,6 +1,6 @@
 import argparse
 from time import sleep
-from discord.external.linux_files import linux_files
+from tools.linux_files import linux_files as lf
 
 def cmd_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description="Basic tools available from the command line.")
@@ -34,32 +34,33 @@ def main():
 
 def installer(service):
     print("Hello, and welcome to the A Path Above computer aided lgsm + Utility installer.")
-    sleep(5)
+    sleep(1)
     if service:
         print(f"You've chosen to install the specific module: {service}")
+        
     match service:
         case "lgsm":
             print("Installing lgsm")
-            linux_files.create_lgsm_folder()
-            linux_files.create_linuxgsm()
-            linux_files.download_pzserver()
+            lf.create_lgsm_folder()
+            lf.create_linuxgsm()
+            lf.download_pzserver()
             print("lgsm install complete")
         case "sysd":
             print("sysd")
-            #linux_files.create_sysd_folders()
-            #linux_files.deploy_sysd_files()
+            lf.create_sysd_folders()
+            lf.deploy_sysd_files()
         case "rcon":
             print("Download rcon")
         case _:
             print("Installing all modules now.")
-            linux_files.create_lgsm_folder()
-            linux_files.create_linuxgsm()
-            linux_files.download_pzserver()
+            lf.create_lgsm_folder()
+            lf.create_linuxgsm()
+            lf.download_pzserver()
             print("lgsm install complete")
             sleep(10)
             print("Deploying systemd files")
-            linux_files.create_sysd_folders()
-            linux_files.deploy_sysd_files()
+            lf.create_sysd_folders()
+            lf.deploy_sysd_files()
             print("sysd files deployed and activated")
             sleep(10)
             print("Installing rcon.")

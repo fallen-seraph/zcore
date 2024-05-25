@@ -6,9 +6,8 @@ OnFailure=apa_notify.service
 
 [Service]
 Type=forking
-WorkingDirectory=~
-ExecStart=~/pz-lgsm/pzserver start
-ExecStop=~/pz-lgsm/pzserver stop
+ExecStart=%h/pzlgsm/pzserver start
+ExecStop=%h/pzlgsm/pzserver stop
 Restart=on-failure
 RestartSec=30
 
