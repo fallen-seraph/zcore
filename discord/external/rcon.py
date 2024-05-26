@@ -1,16 +1,12 @@
-from configs import apaconfig
-from subprocess import run, PIPE, CalledProcessError
+from configs.config import rcon_port, rcon_password
+from rcon.source import Client
+import socket
 
-class apa_rcon:
-    def __init__(self, IP=apaconfig.local_IP, port=apaconfig.local_port, password=apaconfig.local_password):
-        self._IP = IP
-        self._port = port
-        self._password = password
-
-    def rcon_execute(self, command):
-        try:
-            result = run(["rcon", "-a", self._IP + self._port, "-p", self._password, command], stdout=PIPE, check=True, text=True, shell=False, capture_output=True)
-            return result.stdout
-        except CalledProcessError as e:
-            print(f"Unable to rcon: {e}.")
-            return None
+def Rcon(command):
+    try:
+        with Client("127.0.0.1", rcon_port, passwd=rcon_password, timeout=15) as client:
+            return client.run(command)
+    except socket.timeout as timeout:
+        return timeout
+    except ConnectionRefusedError as CRE:
+        return(f"{CRE}\n Is the server offline?")

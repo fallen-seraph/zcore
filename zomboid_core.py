@@ -1,6 +1,6 @@
 import argparse
 from time import sleep
-import tools.linux_installer as li
+import install.linux_installer as li
 
 def CmdLineArgs():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
@@ -11,7 +11,7 @@ def CmdLineArgs():
         , sysd files, and rcon. Follow install with --install-target \
             [service] to deploy a service individually.")
     parser_install.add_argument("--install_target", choices=["lgsm", 
-        "sysd", "rcon"], default=None, dest="target", help="You can choose \
+        "sysd"], default=None, dest="target", help="You can choose \
             one of these to deploy individually.")
     parser_backup = subparsers.add_parser("backup")
     parser_restart = subparsers.add_parser("restart")
@@ -54,8 +54,6 @@ def Installer(service):
         case "sysd":
             print("sysd")
             li.DeploySysdFiles()
-        case "rcon":
-            print("Download rcon")
         case _:
             print("Installing all modules now.")
             li.DeployLgsm()

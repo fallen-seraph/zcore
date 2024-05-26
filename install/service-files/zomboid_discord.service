@@ -1,0 +1,13 @@
+[Unit]
+Description=Runs the apa bus stop teleporter script
+
+[Service]
+WorkingDirectory=%h/Server-Core/discord
+RestartSec=5
+Restart=always
+ExecStart=/usr/bin/python3 -u %h/Server-Core/discord/zomboid_discord.py
+StandardOutput=truncate:%h/Server-Core/logs/discord_out.log
+StandardError=truncate:%h/Server-Core/logs/discord_err.log
+
+[Install]
+WantedBy=multi-user.target
