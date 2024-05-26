@@ -1,4 +1,4 @@
-from subprocess import run, PIPE, CalledProcessError
+from subprocess import run, CalledProcessError
 from tools.linux_files import LinuxFiles as lf
 
 def SysCall(command, serviceFile):
@@ -8,14 +8,9 @@ def SysCall(command, serviceFile):
         print(f"An error occured: {e}.")
 
 def StartAllServices():
-    for file in lf.getSysdFiles():
+    for file in lf.GetSysdFiles():
         SysCall("start", file)
-        
 
-def RestartServices():
+def MainServices(command):
     for file in ["zomboid_main.service", "zomboid_skimmer.service"]:
-        SysCall("restart", file)
-
-def StopServices():
-    for file in ["zomboid_main.service", "zomboid_skimmer.service"]:
-        SysCall("stop", file)
+        SysCall(command, file)

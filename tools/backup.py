@@ -1,13 +1,29 @@
-#systemctl --user stop apathabove
+from subprocess import run, PIPE, CalledProcessError
+from datetime import date, timedelta
+from tools.linux_files import LinuxFiles as files
+import linux_services as services
 
-#rsync -aq --exclude 'backups' --delete /home/apathabove/Zomboid /home/apathabove/backups/temp/
+def main():
+    backupPath = files.GetDailyBackupPath()
+    stagingPath = f"{backupPath}/staging/"
+    dateToDay = date.today()
+    today = dateToDay.strftime("%d_%m_%Y")
+    threeDaysAgo = (dateToDay - timedelta(3)).strftime("%d_%m_%Y")
 
-#tar -czf /home/apathabove/backups/$(date '+%d_%m_%Y')_backup.tar.gz -C /home/apathabove/backups/temp .
+    services.MainServices("stop")
 
-#systemctl --user start apathabove
+    try:
+        run(["rsync", "-aq", "--exclude", "\'backups\'" "--delete",
+            files.GetZomboidPath(), stagingPath])
 
-#if [[ -f /home/apathabove/backups/$(date --date="3 days ago" '+%d_%m_%Y')_backup.tar.gz ]]; then
-        #rm /home/apathabove/backups/$(date --date="3 days ago" '+%d_%m_%Y')_backup.tar.gz
-#fi
+        run(["tar", "-czf", f"{backupPath}/{today}_backup.tar.gz", "-C",
+            stagingPath, "."])
+    except CalledProcessError as e:
+        print(f"An error occured: {e}.")
 
+    services.MainServices("start")
 
+    files.RemoveOldestBackup(threeDaysAgo)
+
+if __name__ == '__main__':
+    main()

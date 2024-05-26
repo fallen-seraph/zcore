@@ -1,9 +1,9 @@
 from subprocess import run, PIPE, CalledProcessError
 from requests import get
-from tools.linux_files import LinuxFiles as lf
+from tools.linux_files import LinuxFiles as files
 
 def DeployLgsm():
-    pzlFolder, file = lf.ManageLgsmFiles()
+    pzlFolder, file = files.ManageLgsmFiles()
     try:
         open(file, 'w').write(
             get("https://linuxgsm.sh").text)
@@ -21,7 +21,7 @@ def DeployLgsm():
 
 
 def DeploySysdFiles():
-    files = lf.ManageSysdFiles()
+    sysFiles = files.ManageSysdFiles()
     try:
         run(["loginctl", "enable-linger"], check=True, text=True,
             shell=False)
@@ -29,7 +29,7 @@ def DeploySysdFiles():
         run(["systemctl", "--user", "daemon-reload"], check=True, text=True,
             shell=False)
         
-        for x in files:
+        for x in sysFiles:
             run(["systemctl", "--user", "enable", x], check=True,
                 text=True, shell=False)
         

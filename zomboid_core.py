@@ -1,6 +1,7 @@
 import argparse
 from time import sleep
-import install.linux_installer as li
+import install.linux_installer as installer
+import tools.backup as backup
 
 def CmdLineArgs():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
@@ -26,9 +27,9 @@ def main():
 
     match args.command:
         case "install":
-            Installer(args.target)
+            InstallMode(args.target)
         case "backup": 
-            print("backup code")
+            backup.main()
         case "restart":
             print("restart code")
         case "chunk":
@@ -38,7 +39,7 @@ def main():
         case _:
             print("temp")
 
-def Installer(service):
+def InstallMode(service):
     print("Hello, and welcome to the A Path Above computer aided \
         lgsm + Utility installer.")
     sleep(1)
@@ -49,18 +50,18 @@ def Installer(service):
     match service:
         case "lgsm":
             print("Installing lgsm, this will take a moment.")
-            li.DeployLgsm()
+            installer.DeployLgsm()
             print("lgsm install complete")
         case "sysd":
             print("sysd")
-            li.DeploySysdFiles()
+            installer.DeploySysdFiles()
         case _:
             print("Installing all modules now.")
-            li.DeployLgsm()
+            installer.DeployLgsm()
             print("lgsm install complete")
             sleep(10)
             print("Deploying systemd files")
-            li.DeploySysdFiles()
+            installer.DeploySysdFiles()
             print("sysd files deployed and activated")
             sleep(10)
             print("Installing rcon.")
