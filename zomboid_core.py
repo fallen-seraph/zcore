@@ -63,8 +63,6 @@ def InstallMode(service):
             print("Deploying systemd files")
             installer.DeploySysdFiles()
             print("sysd files deployed and activated")
-            sleep(10)
-            print("Installing rcon.")
 
 if __name__ == '__main__':
     main()

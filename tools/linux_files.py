@@ -55,7 +55,7 @@ class LinuxFiles:
     
     @classmethod
     def PrepBackupDirectories(cls):
-        Path(f"{cls.__home}/backups/temp").mkdir(exist_ok=True)
+        Path(f"{cls.__dailyBackups}/staging").mkdir(parents=True, exist_ok=True)
 
     @classmethod
     def RemoveOldestBackup(cls, date):
