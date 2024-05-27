@@ -1,64 +1,82 @@
-from pathlib import Path,PurePosixPath
-from shutil import copy2
-from os import scandir, remove
+import pathlib
+from pathlib import Path
+import shutil
+import os
 
 class LinuxFiles:
-    __home = Path.home()
-    __systemctlPath = PurePosixPath(__home).joinpath(".config/systemd/user")
-    __rcon = PurePosixPath(__home).joinpath("rcon/rcon")
-    __dailyBackups = PurePosixPath(__home).joinpath("backups")
-    __pzlgsm = PurePosixPath(__home).joinpath("pzlgsm")
-    __zomboid = PurePosixPath(__home).joinpath("Zomboid/")
-    __zomboidLogs = PurePosixPath(__zomboid).joinpath("Logs")
-    __zomboidSave = PurePosixPath(__zomboid).joinpath(
+    _home = Path.home()
+    _systemctlPath = pathlib.PurePosixPath(_home).joinpath(
+        ".config/systemd/user")
+    _dailyBackups = pathlib.PurePosixPath(_home).joinpath("backups")
+    _pzlgsm = pathlib.PurePosixPath(_home).joinpath("pzlgsm")
+    _zomboidPath = pathlib.PurePosixPath(_home).joinpath("Zomboid/")
+    #_zomboidLogs = pathlib.PurePosixPath(_zomboidPath).joinpath("Logs")
+    _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
-    __zomboidBackups = PurePosixPath(__zomboid).joinpath("backups")
-    __serverini = PurePosixPath(__zomboid).joinpath("Server/pzserver.ini")
-    __accountDB = PurePosixPath(__zomboid).joinpath("db/pzserver.db")
-    
-    @classmethod
-    def GetSysdFiles(cls):
-        return [x.name for x in scandir(cls.__systemctlPath) if x.is_file()]
-    
-    @classmethod
-    def GetDailyBackups(cls):
-        return [x.name for x in scandir(cls.__dailyBackups) if x.is_file()]
-    
-    @classmethod
-    def GetZomboidPath(cls):
-        return cls.__zomboid
-    
-    @classmethod
-    def GetDailyBackupPath(cls):
-        return cls.__dailyBackups
-    
-    @classmethod
-    def ManageLgsmFiles(cls):
-        Path(cls.__pzlgsm).mkdir(exist_ok=True)
-        file = cls.__pzlgsm.joinpath("linuxgsm.sh")
-        Path(file).touch(mode=0o700)
-        return cls.__pzlgsm, file
-    
-    @classmethod
-    def ManageSysdFiles(cls):
-        Path(cls.__systemctlPath).mkdir(parents=True, exist_ok=True)
+    #_zomboidBackups = pathlib.PurePosixPath(_zomboidPath).joinpath("backups")
+    #_serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
+    #_accountDB = pathlib.PurePosixPath(_zomboidPath).joinpath("db/pzserver.db")
 
-        path = PurePosixPath(
-            f"{cls.__home}/Server-Core/install/service-files")
+    @property
+    def home(self):
+        return self._home
+    
+    @property
+    def systemctlPath(self):
+        return self.systemctlPath
+    
+    @property
+    def pzlgsm(self):
+        return self._pzlgsm
+    
+    @property
+    def dailyBackups(self):
+        return self._dailyBackups
+    
+    @property
+    def zomboidPath(self):
+        return self._zomboidPath
+    
+    @property
+    def zomboidSave(self):
+        return self.zomboidSave
+    
+    @classmethod
+    def get_sysd_files(cls):
+        return [x.name for x in os.scandir(cls._systemctlPath) if x.is_file()]
+    
+    @classmethod
+    def get_daily_backup_files(cls):
+        return [x.name for x in os.scandir(cls._dailyBackups) if x.is_file()]
+    
+    @classmethod
+    def manage_lgsm_files(cls):
+        Path(cls._pzlgsm).mkdir(exist_ok=True)
+        file = cls._pzlgsm.joinpath("linuxgsm.sh")
+        Path(file).touch(mode=0o700)
+        return cls._pzlgsm, file
+    
+    @classmethod
+    def manage_sysd_files(cls):
+        Path(cls._systemctlPath).mkdir(parents=True, exist_ok=True)
+
+        path = pathlib.PurePosixPath(
+            f"{cls._home}/Server-Core/install/service-files")
         
-        files = [x.name for x in scandir(path) if x.is_file()]
+        files = [x.name for x in os.scandir(path) if x.is_file()]
 
         for x in files:
-            copy2(f"{path}/{x}", cls.__systemctlPath)
+            shutil.copy2(f"{path}/{x}", cls._systemctlPath)
 
         return files
     
     @classmethod
-    def PrepBackupDirectories(cls):
-        Path(f"{cls.__dailyBackups}/staging").mkdir(parents=True, exist_ok=True)
+    def prep_backup_directories(cls):
+        Path(f"{cls._dailyBackups}/staging").mkdir(parents=True,
+            exist_ok=True)
 
     @classmethod
-    def RemoveOldestBackup(cls, date):
-        for backup in cls.GetDailyBackups():
+    def remove_oldest_backup(cls, date):
+        for backup in cls.get_daily_backup_files():
             if backup == date + "_backup.tar.gz":
-                remove(str(cls.__dailyBackups) + "/" + backup)
+                os.remove(str(cls._dailyBackups) + "/" + backup)

@@ -1,29 +1,27 @@
-from subprocess import run, PIPE, CalledProcessError
-from datetime import date, timedelta
+import subprocess
+from subprocess import CalledProcessError
+import datetime
+from datetime import date
 from tools.linux_files import LinuxFiles as files
-import tools.linux_services as services
+from configs.config import backupRetentionDays
 
 def main():
-    backupPath = files.GetDailyBackupPath()
+    backupPath = files.dailyBackups
     stagingPath = f"{backupPath}/staging/"
     dateToDay = date.today()
     today = dateToDay.strftime("%d_%m_%Y")
-    nDaysAgo = (dateToDay - timedelta(7)).strftime("%d_%m_%Y")
-
-    services.MainServices("stop")
+    nDaysAgo = (dateToDay - datetime.timedelta(backupRetentionDays)).strftime("%d_%m_%Y")
 
     try:
-        run(["rsync", "-aq", "--exclude", "\'backups\'" "--delete",
-            f"{files.GetZomboidPath()}/", stagingPath])
+        subprocess.run(["rsync", "-aq", "--exclude", "\'backups\'" "--delete",
+            f"{files.zomboidPath}/", stagingPath])
 
-        run(["tar", "-czf", f"{backupPath}/{today}_backup.tar.gz", "-C",
+        subprocess.run(["tar", "-czf", f"{backupPath}/{today}_backup.tar.gz", "-C",
             stagingPath, "."])
     except CalledProcessError as e:
         print(f"An error occured: {e}.")
 
-    services.MainServices("start")
-
-    files.RemoveOldestBackup(nDaysAgo)
+    files.remove_oldest_backup(nDaysAgo)
 
 if __name__ == '__main__':
     main()

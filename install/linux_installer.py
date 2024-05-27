@@ -1,17 +1,18 @@
-from subprocess import run, PIPE, CalledProcessError
-from requests import get
+import subprocess
+from subprocess import CalledProcessError
 from tools.linux_files import LinuxFiles as files
+import requests
 
-def DeployLgsm():
-    pzlFolder, file = files.ManageLgsmFiles()
+def deploy_lgsm():
+    pzlFolder, file = files.manage_lgsm_files()
     try:
         open(file, 'w').write(
-            get("https://linuxgsm.sh").text)
+            requests.get("https://linuxgsm.sh").text)
         
-        run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
+        subprocess.run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
             check=True, text=True, shell=False, capture_output=True)
 
-        run([f"{pzlFolder}/pzserver", "install"], input='Y\nY\nN\n',
+        subprocess.run([f"{pzlFolder}/pzserver", "install"], input='Y\nY\nN\n',
             check=True, text=True, shell=False)
 
     except ConnectionError as e:
@@ -20,18 +21,20 @@ def DeployLgsm():
         print(f"An error occured: {e}.")
 
 
-def DeploySysdFiles():
-    sysFiles = files.ManageSysdFiles()
+def deploy_sysd():
     try:
-        run(["loginctl", "enable-linger"], check=True, text=True,
+        subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
             shell=False)
         
-        run(["systemctl", "--user", "daemon-reload"], check=True, text=True,
+        subprocess.run(["systemctl", "--user", "daemon-reload"], check=True, text=True,
             shell=False)
         
-        for x in sysFiles:
-            run(["systemctl", "--user", "enable", x], check=True,
+        for x in files.get_sysd_files():
+            subprocess.run(["systemctl", "--user", "enable", x], check=True,
                 text=True, shell=False)
         
     except CalledProcessError as e:
         print(f"An error occured: {e}")
+
+def misc_tasks():
+    files.prep_backup_directories()

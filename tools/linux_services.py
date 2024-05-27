@@ -8,7 +8,7 @@ def SysCall(command, serviceFile):
         print(f"An error occured: {e}.")
 
 def StartAllServices():
-    for file in lf.GetSysdFiles():
+    for file in lf.get_sysd_files():
         SysCall("start", file)
 
 def MainServices(command):
