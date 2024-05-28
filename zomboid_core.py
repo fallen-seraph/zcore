@@ -6,23 +6,26 @@ import time
 
 def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
-        "Basic tools available from the command line. More functionaliy \
-            available in discord")
+        "Basic tools available from the command line. More functionaliy "
+        "available in discord")
     subparsers = parser.add_subparsers(dest="command")
-    parser_install = subparsers.add_parser("install", help="Deploys lgsm \
-        , sysd files, and rcon. Follow install with --install-target \
-            [service] to deploy a service individually.")
+    parser_install = subparsers.add_parser("install", help="Deploys lgsm, "
+        "sysd files, and rcon. Follow install with --install-target "
+        "[service] to deploy a service individually.")
     parser_install.add_argument("--install_target", choices=["lgsm", 
-        "sysd"], default=None, dest="target", help="You can choose \
-one of these to deploy individually.")
-    subparsers.add_parser("backup", description="Runs a rsync backup, \
-        compresses it, deletes the configured oldest backup.")
-    parser_restart = subparsers.add_parser("restart", help="initiates a server restart. Default message and timing.")
+        "sysd"], default=None, dest="target", help="You can choose "
+        "one of these to deploy individually.")
+    subparsers.add_parser("backup", description="Runs a rsync backup, "
+        "compresses it, deletes the configured oldest backup.")
+    parser_restart = subparsers.add_parser("restart", help="initiates a "
+        "server restart. Default message and timing.")
     parser_restart.add_argument("--message", default=None, dest="message",
         help="You can choose one of these to deploy individually.")
     parser_restart.add_argument("--delay", default=None, dest="delay",
         help="You can choose one of these to deploy individually.")
     parser_restart.add_argument("--backup", default=False, dest="backup",
+        help="You can choose one of these to deploy individually.")
+    parser_restart.add_argument("--andStop", default=None, dest="andStop",
         help="You can choose one of these to deploy individually.")
     parser_chunk = subparsers.add_parser("chunk")
     parser_ban = subparsers.add_parser("banparse")
@@ -38,7 +41,7 @@ def main():
         case "backup": 
             tools_backup.main()
         case "restart":
-            restart.main(args.message, args.delay, args.backup)
+            restart.main(args.message, args.delay, args.backup, args.andStop)
         case "chunk":
             print("chunk code")
         case "banparse":

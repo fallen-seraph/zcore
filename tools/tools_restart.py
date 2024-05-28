@@ -9,7 +9,7 @@ def send_message(fullMessage):
     lgsm.send_server_message(fullMessage)
 
 
-def main(message, delay, backup):
+def main(message, delay, backup, andStop):
     try:
         ShutdownDelay = tools_timer.DelayCalculator(int(delay))
     except ValueError as verr:
@@ -46,7 +46,8 @@ def main(message, delay, backup):
     if backup:
         tools_backup.main()
 
-    services.MainServices("start")
+    if not andStop:
+        services.MainServices("start")
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
