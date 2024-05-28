@@ -1,6 +1,6 @@
 import tools.linux_services as services
 import tools.tools_lgsm as lgsm
-import tools.timer as timer
+import tools.tools_timer as tools_timer
 import tools.tools_backup as tools_backup
 import time
 import sys
@@ -11,18 +11,20 @@ def send_message(fullMessage):
 
 def main(message, delay, backup):
     try:
-        ShutdownDelay = timer.DelayCalculator(int(delay))
+        ShutdownDelay = tools_timer.DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
     except IndexError:
-        ShutdownDelay = timer.DelayCalculator()
+        ShutdownDelay = tools_timer.DelayCalculator()
+    except TypeError:
+        ShutdownDelay = tools_timer.DelayCalculator()
 
     print(f"Restarting the server in {ShutdownDelay.totalDelay}")
 
-    try:
+    if message:
         baseMessage = f"Restarting the server for {message}"
-    except IndexError:
-        baseMessage = f"Restarting the server for a scheduled reboot"
+    else:
+        baseMessage = "Restarting the server for a scheduled reboot"
 
     reboot_intervals = ShutdownDelay.get_all_intervals()
     for x in reboot_intervals:

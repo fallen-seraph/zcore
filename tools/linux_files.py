@@ -46,6 +46,10 @@ class LinuxFiles:
         return cls._home
     
     @classmethod
+    def get_pzlgsm(cls):
+        return cls._pzlgsm
+    
+    @classmethod
     def get_sysd_files(cls):
         return [x.name for x in os.scandir(cls._systemctlPath) if x.is_file()]
     
