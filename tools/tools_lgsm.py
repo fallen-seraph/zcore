@@ -1,6 +1,6 @@
 import subprocess
 from subprocess import CalledProcessError
-from linux_files import LinuxFiles as files
+from tools.linux_files import LinuxFiles as files
 
 def add_user(name, password):
     if name and password:

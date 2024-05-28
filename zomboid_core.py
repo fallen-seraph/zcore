@@ -14,7 +14,7 @@ def CMD_line_args():
             [service] to deploy a service individually.")
     parser_install.add_argument("--install_target", choices=["lgsm", 
         "sysd"], default=None, dest="target", help="You can choose \
-            one of these to deploy individually.")
+one of these to deploy individually.")
     subparsers.add_parser("backup", description="Runs a rsync backup, \
         compresses it, deletes the configured oldest backup.")
     parser_restart = subparsers.add_parser("restart", help="initiates a server restart. Default message and timing.")
@@ -47,12 +47,12 @@ def main():
             print("temp")
 
 def install_mode(service):
-    print("Hello, and welcome to the A Path Above computer aided \
-        lgsm + Utility installer.")
+    print("Hello, and welcome to the A Path Above computer aided "
+        "lgsm + Utility installer.")
     time.sleep(1)
     if service:
-        print(f"You've chosen to install the specific module: \
-            {service}")
+        print("You've chosen to install the specific module: "
+            f"{service}")
 
     match service:
         case "lgsm":
@@ -60,7 +60,6 @@ def install_mode(service):
             installer.deploy_lgsm()
             print("lgsm install complete")
         case "sysd":
-            print("sysd")
             installer.deploy_sysd()
         case _:
             print("Installing all modules now.")

@@ -12,7 +12,7 @@ def deploy_lgsm():
         subprocess.run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
             check=True, text=True, shell=False, capture_output=True)
 
-        subprocess.run([f"{pzlFolder}/pzserver", "install"], input='Y\nY\nN\n',
+        subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder, input='Y\nY\nN\n',
             check=True, text=True, shell=False)
 
     except ConnectionError as e:
@@ -22,6 +22,8 @@ def deploy_lgsm():
 
 
 def deploy_sysd():
+    files.manage_sysd_files()
+
     try:
         subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
             shell=False)

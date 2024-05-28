@@ -1,5 +1,5 @@
 {
-    "rcon_port": "27015",
+    "rcon_port": 27015,
     "rcon_password": "rcon_password",
     "backupRetentionDays": 7,
     "discordNotifChnID": 12341234
