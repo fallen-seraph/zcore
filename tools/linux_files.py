@@ -19,7 +19,7 @@ class LinuxFiles:
 
     @property
     def home(self):
-        return self._home
+        return pathlib.PurePosixPath(self._home)
     
     @property
     def systemctlPath(self):
@@ -39,7 +39,11 @@ class LinuxFiles:
     
     @property
     def zomboidSave(self):
-        return self.zomboidSave
+        return self._zomboidSave
+    
+    @classmethod
+    def get_home(cls):
+        return cls._home
     
     @classmethod
     def get_sysd_files(cls):

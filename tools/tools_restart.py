@@ -1,15 +1,16 @@
 import linux_services as services
 import tools_lgsm as lgsm
 import tools.timer as timer
+import tools.tools_backup as tools_backup
 import time
 import sys
 
 def send_discord_message(message):
      print("sending message")
 
-def main():
+def main(message, delay, backup):
     try:
-        ShutdownDelay = timer.DelayCalculator(int(sys.argv[2]))
+        ShutdownDelay = timer.DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
     except IndexError:
@@ -18,7 +19,7 @@ def main():
     print(f"Restarting the server in {ShutdownDelay.totalDelay}")
 
     try:
-        message = f"Restarting the server for {sys.argv[2]}"
+        message = f"Restarting the server for {message}"
     except IndexError:
         message = f"Restarting the server for a scheduled reboot"
 
@@ -36,6 +37,12 @@ def main():
     time.sleep(30)
 
     services.MainServices("stop")
+
+    if backup:
+        tools_backup.main()
+
+    services.MainServices("start")
+
 
 
 #keeping for reference
@@ -68,4 +75,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

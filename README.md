@@ -26,7 +26,7 @@ Update the config.json file to apply to your system.
 To run the main script:
 
 ```bash
-python3 ~/APA-Server-Core/Server-Core/zomboid_core.py
+python3 ~/Server-Core/zomboid_core.py
 ```
 
 Available Commands from the console:
@@ -38,7 +38,7 @@ Available Commands from the console:
 #[Optional|Choose|one]
 
 #Installs lgsm, rcon, and systemctl files. Optionally you can install each piece individually.
-zomboid_core.py install [lgsm|sysd|rcon]
+zomboid_core.py install --install-target [lgsm|sysd]
 #Initiates a 15 minute reboot with a full backup.
 zomboid_core.py backup
 #Initiates a 15 minute reboot or stop, optional message.

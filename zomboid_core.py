@@ -1,9 +1,10 @@
 import install.linux_installer as installer
-import tools.backup as backup
+import tools.tools_backup as tools_backup
+import tools.tools_restart as restart
 import argparse
 import time
 
-def CmdLineArgs():
+def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
         "Basic tools available from the command line. More functionaliy \
             available in discord")
@@ -16,8 +17,12 @@ def CmdLineArgs():
             one of these to deploy individually.")
     subparsers.add_parser("backup", description="Runs a rsync backup, \
         compresses it, deletes the configured oldest backup.")
-    parser_restart = subparsers.add_parser("timedRestart")
-    parser_restart.add_argument("--message", default=None, dest="target",
+    parser_restart = subparsers.add_parser("restart", help="initiates a server restart. Default message and timing.")
+    parser_restart.add_argument("--message", default=None, dest="message",
+        help="You can choose one of these to deploy individually.")
+    parser_restart.add_argument("--delay", default=None, dest="delay",
+        help="You can choose one of these to deploy individually.")
+    parser_restart.add_argument("--backup", default=False, dest="backup",
         help="You can choose one of these to deploy individually.")
     parser_chunk = subparsers.add_parser("chunk")
     parser_ban = subparsers.add_parser("banparse")
@@ -25,15 +30,15 @@ def CmdLineArgs():
     return parser.parse_args()
 
 def main():
-    args = CmdLineArgs()
+    args = CMD_line_args()
 
     match args.command:
         case "install":
-            InstallMode(args.target)
+            install_mode(args.target)
         case "backup": 
-            backup.main()
+            tools_backup.main()
         case "restart":
-            print("restart code")
+            restart.main(args.message, args.delay, args.backup)
         case "chunk":
             print("chunk code")
         case "banparse":
@@ -41,7 +46,7 @@ def main():
         case _:
             print("temp")
 
-def InstallMode(service):
+def install_mode(service):
     print("Hello, and welcome to the A Path Above computer aided \
         lgsm + Utility installer.")
     time.sleep(1)
