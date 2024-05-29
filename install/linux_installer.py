@@ -40,3 +40,4 @@ def deploy_sysd():
 
 def misc_tasks():
     files.prep_backup_directories()
+    files.prep_chunk_directory()

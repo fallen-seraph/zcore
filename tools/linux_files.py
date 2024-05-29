@@ -95,4 +95,37 @@ class LinuxFiles:
     def remove_oldest_backup(cls, date):
         for backup in cls.get_daily_backup_files():
             if backup == date + "_backup.tar.gz":
-                os.remove(str(cls._dailyBackups) + "/" + backup)
+                Path(cls._dailyBackups.joinpath(backup)).unlink()
+
+    @classmethod
+    def prep_chunk_directory(cls):
+        Path(cls._zomboidPath.joinpath("Lua/chunk_lists")).mkdir(
+            parents=True, exist_ok=True)
+
+    @classmethod
+    def get_exported_list(cls, fileName):
+        chunkFile = cls._zomboidPath.joinpath(f"Lua/chunk_lists/{fileName}")
+        if Path(chunkFile).exists():
+            return chunkFile
+
+    @classmethod
+    def chunks_to_file(cls, rangeList, fileName):
+        newFile = cls._zomboidPath.joinpath(f"Lua/chunk_lists/{fileName}")
+        with open(newFile) as openFile:
+            for fileName in rangeList:
+                openFile.write(fileName+"\n")
+            
+    @classmethod
+    def delete_chunk_list(cls, rangeList, fileName):
+        if fileName:
+            rangeList = []
+            path = cls._zomboidPath.joinpath(f"Lua/chunk_lists/{fileName}")
+            if Path(path).exists():
+                with open(path) as openFile:
+                    fileContents = openFile.read()
+                rawList = list(filter(None, fileContents.split("\n")))
+                for x in rawList:
+                    rangeList.append(f"map_{x}.bin")
+
+        for x in rangeList:
+            Path(cls._zomboidSave.joinpath(x)).unlink()

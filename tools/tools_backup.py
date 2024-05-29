@@ -5,7 +5,7 @@ from datetime import date
 from tools.linux_files import LinuxFiles as files
 from configs.config import backupRetentionDays
 
-def main():
+def backup_handler():
     backupPath = files.get_daily_backup_path()
     stagingPath = f"{backupPath}/staging/"
     dateToDay = date.today()
@@ -22,6 +22,3 @@ def main():
         print(f"An error occured: {e}.")
 
     files.remove_oldest_backup(nDaysAgo)
-
-if __name__ == '__main__':
-    main()
