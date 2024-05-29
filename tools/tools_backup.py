@@ -6,7 +6,7 @@ from tools.linux_files import LinuxFiles as files
 from configs.config import backupRetentionDays
 
 def main():
-    backupPath = files.dailyBackups
+    backupPath = files.get_daily_backup_path()
     stagingPath = f"{backupPath}/staging/"
     dateToDay = date.today()
     today = dateToDay.strftime("%d_%m_%Y")
@@ -14,7 +14,7 @@ def main():
 
     try:
         subprocess.run(["rsync", "-aq", "--exclude", "\'backups\'" "--delete",
-            f"{files.zomboidPath}/", stagingPath])
+            f"{files.get_zomboid_path()}/", stagingPath])
 
         subprocess.run(["tar", "-czf", f"{backupPath}/{today}_backup.tar.gz", "-C",
             stagingPath, "."])

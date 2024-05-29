@@ -14,8 +14,6 @@ def main(message, delay, backup, andStop):
         ShutdownDelay = tools_timer.DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
-    except IndexError:
-        ShutdownDelay = tools_timer.DelayCalculator()
     except TypeError:
         ShutdownDelay = tools_timer.DelayCalculator()
 

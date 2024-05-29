@@ -50,6 +50,14 @@ class LinuxFiles:
         return cls._pzlgsm
     
     @classmethod
+    def get_zomboid_path(cls):
+        return cls._zomboidPath
+    
+    @classmethod
+    def get_daily_backup_path(cls):
+        return cls._dailyBackups
+    
+    @classmethod
     def get_sysd_files(cls):
         return [x.name for x in os.scandir(cls._systemctlPath) if x.is_file()]
     

@@ -1,29 +1,13 @@
+from tools.linux_files import LinuxFiles
+import sys
+
+def range_generator(locationX1, locationY1, locationX2, locationY2):
+
+    for x in range(locationX1, locationY1+1):
+        for y in range (locationX2, locationY2+1):
+            print(str(x)+"_"+str(y))#, file=open(outputFile, 'a'))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Following code blocks only for reference, will be removed eventually. 
-#X1 = 870
-#Y1 = 576
-#X2 = 880
-#Y2 = 586
-#outputFile = "/home/apathabove/Zomboid/Lua/chunk_lists/bill.txt"
-
-# for i in range(X1, X2+1):
-#     for y in range (Y1, Y2+1):
-#         print(str(i)+"_"+str(y), file=open(outputFile, 'a'))
 
 
 # #!/bin/bash
