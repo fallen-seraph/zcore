@@ -8,5 +8,3 @@ rcon_port = json['rcon_port']
 rcon_password = json['rcon_password']
 backupRetentionDays = json['backupRetentionDays']
 discordNotifChnID = json['discordNotifChnID']
-
-print("Configurations loaded.")
