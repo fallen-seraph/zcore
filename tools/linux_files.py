@@ -14,7 +14,7 @@ class LinuxFiles:
     _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
     #_zomboidBackups = pathlib.PurePosixPath(_zomboidPath).joinpath("backups")
-    #_serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
+    _serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
     #_accountDB = pathlib.PurePosixPath(_zomboidPath).joinpath("db/pzserver.db")
 
     @property
@@ -40,6 +40,10 @@ class LinuxFiles:
     @property
     def zomboidSave(self):
         return self._zomboidSave
+    
+    @property
+    def serverini(self):
+        return self._serverini
     
     @classmethod
     def get_home(cls):
@@ -116,16 +120,25 @@ class LinuxFiles:
                 openFile.write(fileName+"\n")
             
     @classmethod
-    def delete_chunk_list(cls, rangeList, fileName):
-        if fileName:
-            rangeList = []
-            path = cls._zomboidPath.joinpath(f"Lua/chunk_lists/{fileName}")
-            if Path(path).exists():
-                with open(path) as openFile:
-                    fileContents = openFile.read()
-                rawList = list(filter(None, fileContents.split("\n")))
-                for x in rawList:
-                    rangeList.append(f"map_{x}.bin")
+    def delete_chunks(cls, rangeList):
+        for row in rangeList:
+            Path(cls._zomboidSave.joinpath(row)).unlink()
 
-        for x in rangeList:
-            Path(cls._zomboidSave.joinpath(x)).unlink()
+    @classmethod
+    def alias_creation(cls):
+        file = cls._home.joinpath("/.bash_aliases")
+        if not Path(file).exists():
+            Path(file).touch(mode=0o700)
+        with open(file, "a") as openFile:
+            openFile.write(fr"zcore=\'/usr/bin/python3 {cls._home}/Server-Core/zomboid_core.py\'")
+
+    @classmethod
+    def open_ini_file(cls):
+        with open(cls._serverini, "r", encoding="IBM865") as openFile:
+            contents = openFile.read()
+        return contents
+    
+    @classmethod
+    def write_ini_file(cls, contents):
+        with open(cls._serverini, "w", encoding="IBM865") as openFile:
+            openFile.write(contents)

@@ -7,4 +7,7 @@ json = json.load(open(fr"{__file__}\..\..\config.json"))
 rcon_port = json['rcon_port']
 rcon_password = json['rcon_password']
 backupRetentionDays = json['backupRetentionDays']
+dynamicLootEnabled = json['dynamicLootEnabled']
+dynamicLootRange = json['dynamicLootRange']
 discordNotifChnID = json['discordNotifChnID']
+serverDownNotifChnID = json['serverDownNotifChnID']

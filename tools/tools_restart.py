@@ -1,13 +1,25 @@
+from tools.linux_files import LinuxFiles as files
 import tools.linux_services as services
 import tools.tools_lgsm as lgsm
 import tools.tools_timer as tools_timer
 import tools.tools_backup as tools_backup
+from configs.config import dynamicLootEnabled, dynamicLootRange
+import random
 import time
 import sys
+import re
 
 def send_message(fullMessage):
     lgsm.send_server_message(fullMessage)
 
+def dynamic_loot():
+    low, high = dynamicLootRange.split(",")
+    random.randrange(low, high)
+    iniFile = files.open_ini_file()
+    oldValue = re.search("HoursForLootRespawn=.*", iniFile)
+    if oldValue:
+        newContents = iniFile.replace(oldValue.group(0), "HoursForLootRespawn=10")
+        files.write_ini_file(newContents)
 
 def restart_handler(message, delay, backup, stop):
     try:
@@ -41,8 +53,14 @@ def restart_handler(message, delay, backup, stop):
 
     services.MainServices("stop")
 
+    if dynamicLootEnabled:
+        dynamic_loot()        
+
     if backup:
         tools_backup.backup_handler()
 
     if not stop:
         services.MainServices("start")
+
+def restart_schedular():
+    print("time")
