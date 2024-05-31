@@ -14,7 +14,12 @@ def main():
         case "backup": 
             tools_backup.backup_handler()
         case "restart":
-            restart.restart_handler(args.message, args.delay, args.backup, args.stop)
+            if args.cancel:
+                restart.cancel_restart()
+            elif args.instant:
+                restart.instant_restart()
+            else:
+                restart.restart_handler(args.message, args.delay, args.backup, args.stop)
         case "chunk":
             if args.range:
                 print(args.chunk_one, args.chunk_two)

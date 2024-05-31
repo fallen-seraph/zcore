@@ -84,7 +84,7 @@ class LinuxFiles:
         password = secrets.token_urlsafe(15)
         if Path(configFile).exists():
             with open(configFile, "a") as openFile:
-                openFile.write(f"adminpassword={password}")
+                openFile.write(f"adminpassword=\"{password}\"")
 
     @classmethod
     def manage_sysd_files(cls):

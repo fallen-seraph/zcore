@@ -9,19 +9,30 @@ def install_commands(subparsers):
         help="install a service individually")
     
 def restart_commands(subparsers):
+    #setup mutual exclusives
     parser_restart = subparsers.add_parser("restart", help="Initiates a "
         "server restart. Default message and timing.")
-    parser_restart.add_argument("-m", "--message", default=None,
+    
+    exclusive_group = parser_restart.add_mutually_exclusive_group()
+    exclusive_group.add_argument("-i", "--instant", default=None,
+        action="store_true", help="Instantly restarts the server. "
+        "USE CAREFULLY!")
+    exclusive_group.add_argument("-c", "--cancel", default=None,
+        action="store_true", help="Cancels a timed reboot.")
+    
+    normal_restart_group = parser_restart.add_argument_group("Custom Restart",
+        "Options ignored if -c or -i are used.")
+    normal_restart_group.add_argument("-m", "--message", default=None,
         dest="message", help="Provided message to make a part of restart "
         "message.")
-    parser_restart.add_argument("-d", "--delay", default=None, dest="delay",
-        type=int, help="Delay before restart, will be rounded up to the "
-        "nearest interval of 5.")
-    parser_restart.add_argument("-b", "--backup", default=False,
+    normal_restart_group.add_argument("-d", "--delay", default=None,
+        dest="delay", type=int, help="Delay before restart, will be rounded "
+        "up to the nearest interval of 5.")
+    normal_restart_group.add_argument("-b", "--backup", default=None,
         dest="backup", action="store_true", help="Will trigger a backup "
         "with the restart.")
-    parser_restart.add_argument("-s", "--stop", default=None,
-        dest="andStop", action="store_true", help="Stops the server instead "
+    normal_restart_group.add_argument("-s", "--stop", default=None,
+        action="store_true", help="Stops the server instead "
         "of starting it after restart.")
     
 def chunk_commands(subparsers):

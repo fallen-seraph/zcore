@@ -14,6 +14,25 @@ import re
 def send_message(fullMessage):
     lgsm.send_server_message(fullMessage)
 
+def instant_restart():
+    services.main_services("restart")
+
+def stop_and_start(backup, stop):
+    services.main_services("stop")     
+
+    if backup:
+        tools_backup.backup_handler()
+
+    #map_sand.bin
+    #aggregated.log
+
+    if not stop:
+        services.main_services("start")
+
+def cancel_restart():
+    services.sys_calls("stop", "zomboid_reboot.service")
+    send_message("Reboot cancelled")
+
 def dynamic_loot():
     low, high = dynamicLootRange.split(",")
     random.randrange(low, high)
@@ -53,16 +72,7 @@ def restart_handler(message, delay, backup, stop):
     
     time.sleep(30)
 
-    services.MainServices("stop")     
-
-    if backup:
-        tools_backup.backup_handler()
-
-    #map_sand.bin
-    #aggregated.log
-
-    if not stop:
-        services.MainServices("start")
+    stop_and_start(backup, stop)
 
 def restart_schedular():
     active, activeTime = services.get_service_info("zomboid_core.service")
@@ -87,10 +97,10 @@ def restart_schedular():
 
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
             restart_handler("a restart and a 15 minute backup",
-                None, True, None)
+                None, True, False)
             if dynamicLootEnabled:
                 dynamic_loot() 
         elif activeTime > sixHoursAgo:
-            restart_handler(None, None, None, None)
+            restart_handler(None, None, False, False)
         else:
             lgsm.lgsm_passthrough("checkModsNeedUpdate")

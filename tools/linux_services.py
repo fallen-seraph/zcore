@@ -2,19 +2,19 @@ from subprocess import run, PIPE, CalledProcessError
 from tools.linux_files import LinuxFiles as lf
 import sys
 
-def SysCall(command, serviceFile):
+def sys_calls(command, serviceFile):
     try:
         run(["systemctl", "--user", command, serviceFile])
     except CalledProcessError as e:
         print(f"An error occured: {e}.")
 
-def StartAllServices():
+def start_all_services():
     for file in lf.get_sysd_files():
-        SysCall("start", file)
+        sys_calls("start", file)
 
-def MainServices(command):
-    for file in ["zomboid_main.service", "zomboid_skimmer.service"]:
-        SysCall(command, file)
+def main_services(command):
+    for file in ["zomboid_core.service", "zomboid_skimmer.service"]:
+        sys_calls(command, file)
 
 def get_service_info(service_name):
     try:
