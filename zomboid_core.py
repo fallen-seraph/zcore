@@ -41,6 +41,8 @@ def install_mode(service):
             print("lgsm install complete")
         case "sysd":
             installer.deploy_sysd()
+        case "misc":
+            installer.misc_tasks()
         case _:
             print("Installing all modules now.")
             installer.deploy_lgsm()

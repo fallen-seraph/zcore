@@ -5,7 +5,7 @@ def install_commands(subparsers):
         "and sysd files. Follow install with --install-target "
         "[service] to deploy a service individually.")
     parser_install.add_argument("-it", "--install_target", choices=["lgsm", 
-        "sysd"], default=None, dest="target",
+        "sysd", "misc"], default=None, dest="target",
         help="install a service individually")
     
 def restart_commands(subparsers):
