@@ -1,6 +1,7 @@
 import subprocess
 from subprocess import CalledProcessError
 from tools.linux_files import LinuxFiles as files
+import sys
 
 def add_user(name, password):
     if name and password:
@@ -46,5 +47,4 @@ def lgsm_passthrough(command):
         result = subprocess.run([f"{files.get_pzlgsm()}/pzserver", "send", command], check=True, text=True, capture_output=True)
         return result
     except CalledProcessError as e:
-        print(f"{e}.")
-        return None
+        sys.exit(f"{e}.")

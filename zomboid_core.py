@@ -3,6 +3,7 @@ import install.linux_installer as installer
 import tools.tools_backup as tools_backup
 import tools.tools_restart as restart
 import tools.tools_chunks as chunks
+import tools.tools_ban as ban
 import time
 
 def main():
@@ -19,15 +20,16 @@ def main():
             elif args.instant:
                 restart.instant_restart()
             else:
-                restart.restart_handler(args.message, args.delay, args.backup, args.stop)
+                restart.restart_handler(args.message, args.delay, args.backup,
+                    args.stop)
         case "chunk":
             if args.range:
-                print(args.chunk_one, args.chunk_two)
-                print(args.file_name)
+               chunks.chunks_by_range(args.chunkOne, args.chunkTwo,
+                    args.file_name)
             else:
-                print(args.file)
+                chunks.chunks_by_file(args.file)
         case "ban":
-            print(args.file)
+            ban.ban_handler(args.file)
         case _:
             print("temp")
 

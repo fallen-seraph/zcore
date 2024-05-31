@@ -49,11 +49,8 @@ def chunk_commands(subparsers):
         help="X_Y of first chunk")
     range_sub_commands.add_argument("chunk_two", metavar="X_Y", type=str,
         help="X_Y of second chunk")
-    range_sub_commands.add_argument("-fn", "--file_name", type=str,
-        help="name of the file this will generate.")
-    
-def ban_arguments(subparsers):
-    print('stuff')
+    range_sub_commands.add_argument("-fn", "--file_name", default=None,
+        type=str, help="name of the file this will generate.")
 
 def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=

@@ -1,3 +1,4 @@
+import tools.tools_lgsm as lgsm
 import pathlib
 from pathlib import Path
 import secrets
@@ -11,12 +12,9 @@ class LinuxFiles:
     _dailyBackups = pathlib.PurePosixPath(_home).joinpath("backups")
     _pzlgsm = pathlib.PurePosixPath(_home).joinpath("pzlgsm")
     _zomboidPath = pathlib.PurePosixPath(_home).joinpath("Zomboid/")
-    #_zomboidLogs = pathlib.PurePosixPath(_zomboidPath).joinpath("Logs")
     _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
-    #_zomboidBackups = pathlib.PurePosixPath(_zomboidPath).joinpath("backups")
     _serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
-    #_accountDB = pathlib.PurePosixPath(_zomboidPath).joinpath("db/pzserver.db")
 
     @property
     def home(self):
