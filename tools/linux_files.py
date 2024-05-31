@@ -1,5 +1,6 @@
 import pathlib
 from pathlib import Path
+import secrets
 import shutil
 import os
 
@@ -74,8 +75,17 @@ class LinuxFiles:
         Path(cls._pzlgsm).mkdir(exist_ok=True)
         file = cls._pzlgsm.joinpath("linuxgsm.sh")
         Path(file).touch(mode=0o700)
+
         return cls._pzlgsm, file
     
+    @classmethod
+    def default_server_password(cls):
+        configFile = cls._pzlgsm.joinpath("lgsm/config-lgsm/pzserver/pzserver.cfg")
+        password = secrets.token_urlsafe(15)
+        if Path(configFile).exists():
+            with open(configFile, "a") as openFile:
+                openFile.write(f"adminpassword={password}")
+
     @classmethod
     def manage_sysd_files(cls):
         Path(cls._systemctlPath).mkdir(parents=True, exist_ok=True)
@@ -126,11 +136,13 @@ class LinuxFiles:
 
     @classmethod
     def alias_creation(cls):
-        file = cls._home.joinpath("/.bash_aliases")
+        file = cls._home.joinpath(".bash_aliases")
         if not Path(file).exists():
             Path(file).touch(mode=0o700)
         with open(file, "a") as openFile:
-            openFile.write(fr"zcore=\'/usr/bin/python3 {cls._home}/Server-Core/zomboid_core.py\'")
+            openFile.write(f"alias zcore='/usr/bin/python3 {cls._home}/"
+                f"Server-Core/zomboid_core.py'\nalias pzserver='"
+                f"{cls._pzlgsm}/pzserver'")
 
     @classmethod
     def open_ini_file(cls):

@@ -1,9 +1,11 @@
-from tools.linux_files import LinuxFiles as files
 import tools.linux_services as services
 import tools.tools_lgsm as lgsm
 import tools.tools_timer as tools_timer
 import tools.tools_backup as tools_backup
-from configs.config import dynamicLootEnabled, dynamicLootRange
+from tools.linux_files import LinuxFiles as files
+from configs.config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
+from datetime import datetime, timedelta
+import pytz
 import random
 import time
 import sys
@@ -51,16 +53,44 @@ def restart_handler(message, delay, backup, stop):
     
     time.sleep(30)
 
-    services.MainServices("stop")
-
-    if dynamicLootEnabled:
-        dynamic_loot()        
+    services.MainServices("stop")     
 
     if backup:
         tools_backup.backup_handler()
+
+    #map_sand.bin
+    #aggregated.log
 
     if not stop:
         services.MainServices("start")
 
 def restart_schedular():
-    print("time")
+    active, activeTime = services.get_service_info("zomboid_core.service")
+    active = active.split("=")[1]
+    
+    if active == "active":
+        backupHour, backupMinute = dailyBackupTime.split(":")
+
+        if not dailyBackupTimeZone == "UTC":
+            backupTimeZone = pytz.timezone(dailyBackupTimeZone)
+            backupTime = datetime.now(backupTimeZone).replace(hour=int(
+                backupHour), minute=int(backupMinute)).astimezone(pytz.utc)
+        else:
+            backupTime = datetime.now(pytz.utc).replace(hour=int(backupHour), 
+                minute=int(backupMinute))
+        
+        currentTime = datetime.now(pytz.utc)
+        activeTime = activeTime.split("=")[1]
+        activeTime = datetime.strptime(activeTime,
+            "%a %Y-%m-%d %H:%M:%S %Z").astimezone(pytz.utc)
+        sixHoursAgo = currentTime - timedelta(hours=6)
+
+        if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
+            restart_handler("a restart and a 15 minute backup",
+                None, True, None)
+            if dynamicLootEnabled:
+                dynamic_loot() 
+        elif activeTime > sixHoursAgo:
+            restart_handler(None, None, None, None)
+        else:
+            lgsm.lgsm_passthrough("checkModsNeedUpdate")
