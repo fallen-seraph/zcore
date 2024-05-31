@@ -12,8 +12,10 @@ def deploy_lgsm():
         subprocess.run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
             check=True, text=True, shell=False, capture_output=True)
 
-        subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder, input='Y\nY\nN\n',
-            check=True, text=True, shell=False)
+        subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder,
+            input='Y\nY\nN\n', check=True, text=True, shell=False)
+        
+        files.default_server_password()
 
     except ConnectionError as e:
         print(f"Connection Error occured: {e}")
@@ -28,8 +30,8 @@ def deploy_sysd():
         subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
             shell=False)
         
-        subprocess.run(["systemctl", "--user", "daemon-reload"], check=True, text=True,
-            shell=False)
+        subprocess.run(["systemctl", "--user", "daemon-reload"], check=True,
+            text=True, shell=False)
         
         for x in files.get_sysd_files():
             subprocess.run(["systemctl", "--user", "enable", x], check=True,
