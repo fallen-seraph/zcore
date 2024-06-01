@@ -1,10 +1,10 @@
+import requests
 import subprocess
 from subprocess import CalledProcessError
-from tools.linux_files import LinuxFiles as files
-import requests
+from tools.linux_files import LinuxFiles
 
 def deploy_lgsm():
-    pzlFolder, file = files.manage_lgsm_files()
+    pzlFolder, file = LinuxFiles.manage_lgsm_files()
     try:
         open(file, 'w').write(
             requests.get("https://linuxgsm.sh").text)
@@ -15,7 +15,7 @@ def deploy_lgsm():
         subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder,
             input='Y\nY\nN\n', check=True, text=True, shell=False)
         
-        files.default_server_password()
+        LinuxFiles.default_server_password()
 
     except ConnectionError as e:
         print(f"Connection Error occured: {e}")
@@ -24,7 +24,7 @@ def deploy_lgsm():
 
 
 def deploy_sysd():
-    files.manage_sysd_files()
+    LinuxFiles.manage_sysd_files()
 
     try:
         subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
@@ -33,7 +33,7 @@ def deploy_sysd():
         subprocess.run(["systemctl", "--user", "daemon-reload"], check=True,
             text=True, shell=False)
         
-        for x in files.get_sysd_files():
+        for x in LinuxFiles.get_sysd_files():
             subprocess.run(["systemctl", "--user", "enable", x], check=True,
                 text=True, shell=False)
         
@@ -41,6 +41,6 @@ def deploy_sysd():
         print(f"An error occured: {e}")
 
 def misc_tasks():
-    files.prep_backup_directories()
-    files.prep_chunk_directory()
-    files.alias_creation()
+    LinuxFiles.prep_backup_directories()
+    LinuxFiles.prep_chunk_directory()
+    LinuxFiles.alias_creation()

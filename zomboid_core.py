@@ -1,10 +1,7 @@
-import utils.arguments as arguments
-import install.linux_installer as installer
-import tools_backup as tools_backup
-import tools.tools_restart as restart
-import tools.tools_chunks as chunks
+from utils import arguments
+from tools import backup, ban, chunks, restart
+from install import linux_installer
 
-import tools.tools_ban as ban
 import time
 
 def main():
@@ -14,7 +11,7 @@ def main():
         case "install":
             install_mode(args.target)
         case "backup": 
-            tools_backup.backup_handler()
+            backup.backup_handler()
         case "restart":
             if args.cancel:
                 restart.cancel_restart()
@@ -45,23 +42,23 @@ def install_mode(service):
     match service:
         case "lgsm":
             print("Installing lgsm, this will take a moment.")
-            installer.deploy_lgsm()
+            linux_installer.deploy_lgsm()
             print("lgsm install complete")
         case "sysd":
-            installer.deploy_sysd()
+            linux_installer.deploy_sysd()
         case "misc":
-            installer.misc_tasks()
+            linux_installer.misc_tasks()
         case _:
             print("Installing all modules now.")
-            installer.deploy_lgsm()
+            linux_installer.deploy_lgsm()
             print("lgsm install complete")
             time.sleep(10)
             print("Deploying systemd files")
-            installer.deploy_sysd()
+            linux_installer.deploy_sysd()
             print("sysd files deployed and activated")
             time.sleep(10)
             print("finalizing tasks")
-            installer.misc_tasks()
+            linux_installer.misc_tasks()
             print("install complete")
 
 if __name__ == '__main__':

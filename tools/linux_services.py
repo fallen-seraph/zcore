@@ -1,6 +1,7 @@
-from subprocess import run, PIPE, CalledProcessError
-from tools.linux_files import LinuxFiles as lf
 import sys
+from subprocess import run, PIPE, CalledProcessError
+from linux_files import LinuxFiles
+
 
 def sys_calls(command, serviceFile):
     try:
@@ -9,7 +10,7 @@ def sys_calls(command, serviceFile):
         print(f"An error occured: {e}.")
 
 def start_all_services():
-    for file in lf.get_sysd_files():
+    for file in LinuxFiles.get_sysd_files():
         sys_calls("start", file)
 
 def main_services(command):

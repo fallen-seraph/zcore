@@ -1,54 +1,55 @@
-import tools.linux_services as services
-import tools.tools_lgsm as lgsm
-import tools.tools_timer as tools_timer
-import tools.tools_backup as tools_backup
-from tools.linux_files import LinuxFiles as files
-from config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
-from datetime import datetime, timedelta
 import pytz
 import random
 import time
 import sys
 import re
+from datetime import datetime, timedelta
+
+from tools import linux_services, lgsm, backup
+from tools.delay import DelayCalculator
+from tools.linux_files import LinuxFiles
+
+from utils.config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
+
 
 def send_message(fullMessage):
     lgsm.send_server_message(fullMessage)
 
 def instant_restart():
-    services.main_services("restart")
+    linux_services.main_services("restart")
 
-def stop_and_start(backup, stop):
-    services.main_services("stop")     
+def stop_and_start(triggerBackup, stop):
+    linux_services.main_services("stop")     
 
-    if backup:
-        tools_backup.backup_handler()
+    if triggerBackup:
+        backup.backup_handler()
 
     #map_sand.bin
     #aggregated.log
 
     if not stop:
-        services.main_services("start")
+        linux_services.main_services("start")
 
 def cancel_restart():
-    services.sys_calls("stop", "zomboid_reboot.service")
+    linux_services.sys_calls("stop", "zomboid_reboot.service")
     send_message("Reboot cancelled")
 
 def dynamic_loot():
     low, high = dynamicLootRange.split(",")
     random.randrange(low, high)
-    iniFile = files.open_ini_file()
+    iniFile = LinuxFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
     if oldValue:
         newContents = iniFile.replace(oldValue.group(0), "HoursForLootRespawn=10")
-        files.write_ini_file(newContents)
+        LinuxFiles.write_ini_file(newContents)
 
-def restart_handler(message, delay, backup, stop):
+def restart_handler(message, delay, triggerBackup, stop):
     try:
-        ShutdownDelay = tools_timer.DelayCalculator(int(delay))
+        ShutdownDelay = DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
     except TypeError:
-        ShutdownDelay = tools_timer.DelayCalculator()
+        ShutdownDelay = DelayCalculator()
 
     print(f"Restarting the server in {ShutdownDelay.totalDelay}")
 
@@ -72,10 +73,10 @@ def restart_handler(message, delay, backup, stop):
     
     time.sleep(30)
 
-    stop_and_start(backup, stop)
+    stop_and_start(triggerBackup, stop)
 
 def restart_schedular():
-    active, activeTime = services.get_service_info("zomboid_core.service")
+    active, activeTime = linux_services.get_service_info("zomboid_core.service")
     active = active.split("=")[1]
     
     if active == "active":

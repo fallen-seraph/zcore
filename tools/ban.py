@@ -1,4 +1,4 @@
-import tools.tools_lgsm as lgsm
+from tools import lgsm
 
 def ban_handler(file):
     with open(file, "r") as openFile:
