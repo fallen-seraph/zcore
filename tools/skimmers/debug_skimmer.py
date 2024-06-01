@@ -1,10 +1,11 @@
+import time
+import threading
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from pathlib import Path
-import multiprocessing
-import threading
-import time
-import re
+
+from tools.linux_files import LinuxFiles
+
+from tools.skimmers import log_processing
 
 class LogHandler(FileSystemEventHandler):
     def __init__(self, directory, process_line_callback):
@@ -40,13 +41,12 @@ class LogHandler(FileSystemEventHandler):
             self.process_line_callback(line)
 
 def process_line(line):
-    # Add your logic to process each line here
-    print(f"Processing line: {line.strip()}")
+    threading.Thread(target=log_processing.debug_log, args=(line,)).start()
 
 def monitor_directory(directory):
     event_handler = LogHandler(directory, process_line)
     observer = Observer()
-    observer.schedule(event_handler, path=directory, recursive=False)
+    observer.schedule(event_handler, directory, False)
     observer.start()
     try:
         while True:
@@ -56,5 +56,4 @@ def monitor_directory(directory):
     observer.join()
 
 if __name__ == "__main__":
-    log_directory = "/home/pzserver/Zomboid/Logs"
-    monitor_directory(log_directory)
+    monitor_directory(LinuxFiles.get_zomboid_logs())

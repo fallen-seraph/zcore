@@ -1,6 +1,6 @@
 import sys
 from subprocess import run, PIPE, CalledProcessError
-from linux_files import LinuxFiles
+from tools.linux_files import LinuxFiles
 
 
 def sys_calls(command, serviceFile):

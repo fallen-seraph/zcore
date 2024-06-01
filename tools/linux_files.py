@@ -1,8 +1,8 @@
-import pathlib
-from pathlib import Path
+import os
 import secrets
 import shutil
-import os
+import pathlib
+from pathlib import Path
 
 class LinuxFiles:
     _home = Path.home()
@@ -13,6 +13,8 @@ class LinuxFiles:
     _zomboidPath = pathlib.PurePosixPath(_home).joinpath("Zomboid/")
     _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
+    _zomboidLogs = pathlib.PurePosixPath(_zomboidPath).joinpath(
+        "Logs")
     _serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
 
     @property
@@ -56,6 +58,10 @@ class LinuxFiles:
         return cls._zomboidPath
     
     @classmethod
+    def get_zomboid_logs(cls):
+        return cls._zomboidLogs
+    
+    @classmethod
     def get_daily_backup_path(cls):
         return cls._dailyBackups
     
@@ -82,6 +88,7 @@ class LinuxFiles:
         if Path(configFile).exists():
             with open(configFile, "a") as openFile:
                 openFile.write(f"adminpassword=\"{password}\"")
+    #the above method doesn't actually set the admin password for first run, fix it if possible
 
     @classmethod
     def manage_sysd_files(cls):
