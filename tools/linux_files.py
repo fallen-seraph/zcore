@@ -15,7 +15,8 @@ class LinuxFiles:
         "Saves/Multiplayer/pzserver")
     _zomboidLogs = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Logs")
-    _serverini = pathlib.PurePosixPath(_zomboidPath).joinpath("Server/pzserver.ini")
+    _serverini = pathlib.PurePosixPath(_zomboidPath).joinpath(
+        "Server/pzserver.ini")
 
     @property
     def home(self):
@@ -83,12 +84,13 @@ class LinuxFiles:
     
     @classmethod
     def default_server_password(cls):
-        configFile = cls._pzlgsm.joinpath("lgsm/config-lgsm/pzserver/pzserver.cfg")
+        configFile = cls._pzlgsm.joinpath(
+            "lgsm/config-lgsm/pzserver/common.cfg")
         password = secrets.token_urlsafe(15)
         if Path(configFile).exists():
             with open(configFile, "a") as openFile:
-                openFile.write(f"adminpassword=\"{password}\"")
-    #the above method doesn't actually set the admin password for first run, fix it if possible
+                openFile.write("startparameters=\"-servername ${selfname} "
+                    f"-adminpassword \"{password}\"\"")
 
     @classmethod
     def manage_sysd_files(cls):

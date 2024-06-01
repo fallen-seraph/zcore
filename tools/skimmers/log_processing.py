@@ -1,6 +1,4 @@
-import re
-
-from tools import lgsm, restart
+from tools import restart
 
 def debug_log(line):
     if "Mods need update" in line:
