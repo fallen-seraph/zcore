@@ -14,7 +14,7 @@ adduser [username]
 Install prereqs
 
 ```bash
-sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-rcon rcon python3-pytzdata
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-rcon rcon python3-pytzdata python3-watchdog
 ```
 
 Logout from root and into the user created above. This is necessary for systemctl --user statements to correctly run. 

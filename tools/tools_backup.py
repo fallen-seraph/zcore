@@ -3,7 +3,7 @@ from subprocess import CalledProcessError
 import datetime
 from datetime import date
 from tools.linux_files import LinuxFiles as files
-from configs.config import backupRetentionDays
+from config import backupRetentionDays
 
 def backup_handler():
     backupPath = files.get_daily_backup_path()

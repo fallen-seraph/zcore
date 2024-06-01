@@ -1,4 +1,4 @@
-import tools.tools_lgsm as lgsm
+from . import tools_lgsm as lgsm
 import pathlib
 from pathlib import Path
 import secrets

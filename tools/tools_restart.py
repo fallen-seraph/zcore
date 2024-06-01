@@ -3,7 +3,7 @@ import tools.tools_lgsm as lgsm
 import tools.tools_timer as tools_timer
 import tools.tools_backup as tools_backup
 from tools.linux_files import LinuxFiles as files
-from configs.config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
+from config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
 from datetime import datetime, timedelta
 import pytz
 import random
