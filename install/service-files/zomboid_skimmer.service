@@ -2,12 +2,12 @@
 Description=Runs the apa bus stop teleporter script
 
 [Service]
-WorkingDirectory=%h/Server-Core/tools/
+WorkingDirectory=%h/zcore/tools/
 RestartSec=5
 Restart=always
-ExecStart=/usr/bin/python3 -u %h/Server-Core/tools/tools_skimmer.py
-StandardOutput=truncate:%h/Server-Core/logs/skim_out.log
-StandardError=truncate:%h/Server-Core/logs/skim_err.log
+ExecStart=/usr/bin/python3 -u %h/zcore/tools/tools_skimmer.py
+StandardOutput=truncate:%h/zcore/logs/skim_out.log
+StandardError=truncate:%h/zcore/logs/skim_err.log
 
 [Install]
 WantedBy=multi-user.target

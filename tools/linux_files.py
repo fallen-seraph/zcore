@@ -88,7 +88,7 @@ class LinuxFiles:
         Path(cls._systemctlPath).mkdir(parents=True, exist_ok=True)
 
         path = pathlib.PurePosixPath(
-            f"{cls._home}/Server-Core/install/service-files")
+            f"{cls._home}/zcore/install/service-files")
         
         files = [x.name for x in os.scandir(path) if x.is_file()]
 
@@ -138,7 +138,7 @@ class LinuxFiles:
             Path(file).touch(mode=0o700)
         with open(file, "a") as openFile:
             openFile.write(f"alias zcore='/usr/bin/python3 {cls._home}/"
-                f"Server-Core/zomboid_core.py'\nalias pzserver='"
+                f"zcore/zomboid_core.py'\nalias pzserver='"
                 f"{cls._pzlgsm}/pzserver'")
 
     @classmethod

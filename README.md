@@ -1,4 +1,4 @@
-# Server-Core
+# zcore
 
 Core set of utilities and scripts to deploy and service zomboid with [lgsm](https://linuxgsm.com/servers/pzserver/).
 
@@ -26,7 +26,7 @@ Update the config.json file to apply to your system.
 To run the main script:
 
 ```bash
-python3 ~/Server-Core/zomboid_core.py
+python3 ~/zcore/zomboid_core.py
 ```
 
 Available Commands from the console:
