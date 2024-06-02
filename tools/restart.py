@@ -100,15 +100,13 @@ def restart_schedular():
         activeTime = activeTime.split("=")[1]
         activeTime = datetime.strptime(activeTime,
             "%a %Y-%m-%d %H:%M:%S %Z").astimezone(pytz.utc)
-        sixHoursAgo = currentTime - timedelta(hours=6)
+        sixHoursAfterStart = activeTime + timedelta(hours=6)
 
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
             print("Restart and 15 minute backup")
             restart_handler("a restart and a 15 minute backup",
                 None, True, False)
-            if config.dynamicLootEnabled:
-                dynamic_loot() 
-        elif activeTime > sixHoursAgo:
+        elif sixHoursAfterStart < currentTime:
             print("6 hour reboot")
             restart_handler(None, None, False, False)
         else:

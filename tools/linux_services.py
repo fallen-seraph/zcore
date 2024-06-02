@@ -19,7 +19,7 @@ def main_services(command):
 
 def get_service_info(service_name):
     try:
-        result = run(["systemctl", "show", service_name, "--property=ActiveEnterTimestamp,ActiveState"], stdout=PIPE, text=True)
+        result = run(["systemctl", "--user", "show", service_name, "--property=ActiveEnterTimestamp,ActiveState"], stdout=PIPE, text=True)
         return result.stdout.strip().split("\n")
     except CalledProcessError as e:
         sys.exit(f"An error occured: {e}.")
