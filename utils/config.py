@@ -39,6 +39,5 @@ try:
     playerNotificationURL = cparser.get('DISCORD', 'playerNotificationURL')
     adminNotificationURL = cparser.get('DISCORD', 'adminNotificationURL')
 
-    print("All configuration values are valid.")
 except (configparser.Error, ValueError) as e:
     print(f"Configuration error: {e}")

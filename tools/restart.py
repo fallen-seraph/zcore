@@ -44,7 +44,8 @@ def dynamic_loot():
     iniFile = LinuxFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
     if oldValue:
-        newContents = iniFile.replace(oldValue.group(0), "HoursForLootRespawn=10")
+        newContents = iniFile.replace(oldValue.group(0),
+            "HoursForLootRespawn=10")
         LinuxFiles.write_ini_file(newContents)
 
 def restart_handler(message, delay, triggerBackup, stop):
@@ -80,7 +81,8 @@ def restart_handler(message, delay, triggerBackup, stop):
     stop_and_start(triggerBackup, stop)
 
 def restart_schedular():
-    active, activeTime = linux_services.get_service_info("zomboid_core.service")
+    active, activeTime = linux_services.get_service_info(
+        "zomboid_core.service")
     active = active.split("=")[1]
     
     if active == "active":
@@ -91,7 +93,7 @@ def restart_schedular():
             backupTime = datetime.now(backupTimeZone).replace(hour=int(
                 backupHour), minute=int(backupMinute)).astimezone(pytz.utc)
         else:
-            backupTime = datetime.now(pytz.utc).replace(hour=int(backupHour), 
+            backupTime = datetime.now(pytz.utc).replace(hour=int(backupHour),
                 minute=int(backupMinute))
         
         currentTime = datetime.now(pytz.utc)
@@ -101,11 +103,14 @@ def restart_schedular():
         sixHoursAgo = currentTime - timedelta(hours=6)
 
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
+            print("Restart and 15 minute backup")
             restart_handler("a restart and a 15 minute backup",
                 None, True, False)
             if config.dynamicLootEnabled:
                 dynamic_loot() 
         elif activeTime > sixHoursAgo:
+            print("6 hour reboot")
             restart_handler(None, None, False, False)
         else:
+            print("mod update")
             lgsm.lgsm_passthrough("checkModsNeedUpdate")

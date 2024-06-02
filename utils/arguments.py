@@ -19,6 +19,8 @@ def restart_commands(subparsers):
         "USE CAREFULLY!")
     exclusive_group.add_argument("-c", "--cancel", default=None,
         action="store_true", help="Cancels a timed reboot.")
+    exclusive_group.add_argument("-sc", "--scheduled", default=None,
+        action="store_true", help="Initiates the scheduled reboots.")
     
     normal_restart_group = parser_restart.add_argument_group("Custom Restart",
         "Options ignored if -c or -i are used.")

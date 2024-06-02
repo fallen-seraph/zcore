@@ -13,7 +13,9 @@ def main():
         case "backup": 
             backup.backup_handler()
         case "restart":
-            if args.cancel:
+            if args.scheduled:
+                restart.restart_schedular()
+            elif args.cancel:
                 restart.cancel_restart()
             elif args.instant:
                 restart.instant_restart()
