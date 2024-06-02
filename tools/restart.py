@@ -5,7 +5,7 @@ import sys
 import re
 from datetime import datetime, timedelta
 
-from tools import linux_services, lgsm, backup
+from tools import linux_services, lgsm, backup, discord
 from tools.delay import DelayCalculator
 from tools.linux_files import LinuxFiles
 
@@ -14,6 +14,8 @@ from utils.config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, 
 
 def send_message(fullMessage):
     lgsm.send_server_message(fullMessage)
+    discord.discord_player_notifications(fullMessage)
+
 
 def instant_restart():
     linux_services.main_services("restart")
@@ -35,7 +37,7 @@ def cancel_restart():
     send_message("Reboot cancelled")
 
 def dynamic_loot():
-    low, high = dynamicLootRange.split(",")
+    low, high = dynamicLootRange
     random.randrange(low, high)
     iniFile = LinuxFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)

@@ -14,7 +14,7 @@ adduser [username]
 Install prereqs
 
 ```bash
-sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-rcon rcon python3-pytzdata python3-watchdog
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-pytzdata python3-watchdog
 ```
 
 Logout from root and into the user created above. This is necessary for systemctl --user statements to correctly run. 
@@ -23,10 +23,17 @@ Logout from root and into the user created above. This is necessary for systemct
 
 Update the config.json file to apply to your system.
 
-To run the main script:
+If you need a full system install use the following. 
 
 ```bash
-python3 ~/zcore/zomboid_core.py
+python3 ~/zcore/zomboid_core.py install
+```
+
+If you already have zomboid installed and it's installed to ~/Zomboid then run the following to install sysd and misc.
+
+``````bash
+python3 ~/zcore/zomboid_core.py install sysd
+python3 ~/zcore/zomboid_core.py install misc
 ```
 
 Available Commands from the console:
@@ -37,8 +44,8 @@ Available Commands from the console:
 #[Optional]
 #[Optional|Choose|one]
 
-#Installs lgsm, rcon, and systemctl files. Optionally you can install each piece individually.
-zomboid_core.py install --install-target [lgsm|sysd]
+#Installs lgsm, and systemctl files. Optionally you can install each piece individually.
+zomboid_core.py install --install-target [lgsm|sysd|misc]
 #Initiates a 15 minute reboot with a full backup.
 zomboid_core.py backup
 #Initiates a 15 minute reboot or stop, optional message.
