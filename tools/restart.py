@@ -9,13 +9,13 @@ from tools import linux_services, lgsm, backup, discord
 from tools.delay import DelayCalculator
 from tools.linux_files import LinuxFiles
 
-from utils.config import dynamicLootEnabled, dynamicLootRange, dailyBackupTime, dailyBackupTimeZone
+from utils import config
 
 
 def send_message(fullMessage):
+    print(fullMessage)
     lgsm.send_server_message(fullMessage)
     discord.discord_player_notifications(fullMessage)
-
 
 def instant_restart():
     linux_services.main_services("restart")
@@ -25,6 +25,8 @@ def stop_and_start(triggerBackup, stop):
 
     if triggerBackup:
         backup.backup_handler()
+        if config.dynamicLootEnabled:
+            dynamic_loot()
 
     #map_sand.bin
     #aggregated.log
@@ -37,7 +39,7 @@ def cancel_restart():
     send_message("Reboot cancelled")
 
 def dynamic_loot():
-    low, high = dynamicLootRange
+    low, high = config.dynamicLootRange
     random.randrange(low, high)
     iniFile = LinuxFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
@@ -82,10 +84,10 @@ def restart_schedular():
     active = active.split("=")[1]
     
     if active == "active":
-        backupHour, backupMinute = dailyBackupTime.split(":")
+        backupHour, backupMinute = config.dailyBackupTime.split(":")
 
-        if not dailyBackupTimeZone == "UTC":
-            backupTimeZone = pytz.timezone(dailyBackupTimeZone)
+        if not config.dailyBackupTimeZone == "UTC":
+            backupTimeZone = pytz.timezone(config.dailyBackupTimeZone)
             backupTime = datetime.now(backupTimeZone).replace(hour=int(
                 backupHour), minute=int(backupMinute)).astimezone(pytz.utc)
         else:
@@ -101,7 +103,7 @@ def restart_schedular():
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
             restart_handler("a restart and a 15 minute backup",
                 None, True, False)
-            if dynamicLootEnabled:
+            if config.dynamicLootEnabled:
                 dynamic_loot() 
         elif activeTime > sixHoursAgo:
             restart_handler(None, None, False, False)
