@@ -2,8 +2,8 @@
 Description=Runs the notify script to gather info and send it to discord.
 
 [Service]
-WorkingDirectory=%h/zcore/tools
-ExecStart=/usr/bin/python3 %h/zcore/tools/tools_report.py
+WorkingDirectory=%h/zcore
+ExecStart=/usr/bin/python3 %h/zcore report
 
 [Install]
 WantedBy=multi-user.target

@@ -13,9 +13,8 @@ def start_all_services():
     for file in LinuxFiles.get_sysd_files():
         sys_calls("start", file)
 
-def main_services(command):
-    for file in ["zomboid_core.service", "zomboid_skimmer.service"]:
-        sys_calls(command, file)
+def core_service(command):
+    sys_calls(command, "zomboid_core.service")
 
 def get_service_info(service_name):
     try:

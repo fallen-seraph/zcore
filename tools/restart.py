@@ -18,10 +18,10 @@ def send_message(fullMessage):
     discord.discord_player_notifications(fullMessage)
 
 def instant_restart():
-    linux_services.main_services("restart")
+    linux_services.core_service("restart")
 
 def stop_and_start(triggerBackup, stop):
-    linux_services.main_services("stop")
+    linux_services.core_service("stop")
     LinuxFiles.delete_map_sand() 
 
     if triggerBackup:
@@ -29,10 +29,8 @@ def stop_and_start(triggerBackup, stop):
         if config.dynamicLootEnabled:
             dynamic_loot()
 
-    #aggregated.log
-
     if not stop:
-        linux_services.main_services("start")
+        linux_services.core_service("start")
 
 def cancel_restart():
     linux_services.sys_calls("stop", "zomboid_reboot.service")
@@ -55,8 +53,6 @@ def restart_handler(message, delay, triggerBackup, stop):
             sys.exit(f"{verr}")
     except TypeError:
         ShutdownDelay = DelayCalculator()
-
-    print(f"Restarting the server in {ShutdownDelay.totalDelay}")
 
     if message:
         baseMessage = f"Restarting the server for {message}"

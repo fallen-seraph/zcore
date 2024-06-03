@@ -75,7 +75,7 @@ def CMD_line_args():
         type=argparse.FileType('r'), help="File with a list of chunk "
         "coordinates.")
     
-    subparsers.add_parser("skimmer", help="Stops the server instead "
-        "of starting it after restart.")
+    subparsers.add_parser("skimmer", help=argparse.SUPPRESS)
+    subparsers.add_parser("report", help=argparse.SUPPRESS)
     
     return parser.parse_args()
