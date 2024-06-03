@@ -1,7 +1,5 @@
 import time
-from tools import restart
-from tools import linux_services
-from tools import discord
+from tools import restart, linux_services, discord
 
 def debug_log(line):
     if "Mods need update" in line:
@@ -10,9 +8,7 @@ def debug_log(line):
         time.sleep(20)
         discord.discord_player_notifications("Steam connection failure, "
             "restarting.")
-        active, activeTime = linux_services.get_service_info(
-        "zomboid_core.service")
-        active = active.split("=")[1]
+        active = linux_services.get_service_status("zomboid_core.service")[1]
         if active != "active":
             linux_services.core_service("restart")
         else:
