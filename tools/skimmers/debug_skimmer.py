@@ -43,7 +43,8 @@ class LogHandler(FileSystemEventHandler):
 def process_line(line):
     threading.Thread(target=log_processing.debug_log, args=(line,)).start()
 
-def monitor_directory(directory):
+def monitor_directory():
+    directory = LinuxFiles.get_zomboid_logs()
     event_handler = LogHandler(directory, process_line)
     observer = Observer()
     observer.schedule(event_handler, directory, False)
@@ -54,6 +55,3 @@ def monitor_directory(directory):
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
-
-if __name__ == "__main__":
-    monitor_directory(LinuxFiles.get_zomboid_logs())

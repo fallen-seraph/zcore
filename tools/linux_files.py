@@ -160,3 +160,9 @@ class LinuxFiles:
     def write_ini_file(cls, contents):
         with open(cls._serverini, "w", encoding="IBM865") as openFile:
             openFile.write(contents)
+
+    @classmethod
+    def delete_map_sand(cls):
+        sandPath = cls._zomboidSave.joinpath("map_sand.bin")
+        if Path(sandPath).exists():
+            Path(sandPath).unlink()

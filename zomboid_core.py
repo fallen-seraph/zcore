@@ -1,6 +1,7 @@
 from utils import arguments
 from tools import backup, ban, chunks, restart
 from install import linux_installer
+from tools.skimmers import debug_skimmer
 
 import time
 
@@ -30,6 +31,8 @@ def main():
                 chunks.chunks_by_file(args.file)
         case "ban":
             ban.ban_handler(args.file)
+        case "skimmer":
+            debug_skimmer.monitor_directory()
         case _:
             print("temp")
 

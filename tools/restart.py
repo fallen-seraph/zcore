@@ -21,14 +21,14 @@ def instant_restart():
     linux_services.main_services("restart")
 
 def stop_and_start(triggerBackup, stop):
-    linux_services.main_services("stop")     
+    linux_services.main_services("stop")
+    LinuxFiles.delete_map_sand() 
 
     if triggerBackup:
         backup.backup_handler()
         if config.dynamicLootEnabled:
             dynamic_loot()
 
-    #map_sand.bin
     #aggregated.log
 
     if not stop:
