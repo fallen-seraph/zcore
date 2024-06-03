@@ -28,7 +28,7 @@ def stop_and_start(triggerBackup, stop):
         backup.backup_handler()
         if config.dynamicLootEnabled:
             dynamic_loot()
-
+            
     if not stop:
         linux_services.core_service("start")
 

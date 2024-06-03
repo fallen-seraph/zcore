@@ -131,14 +131,17 @@ class LinuxFiles:
     @classmethod
     def chunks_to_file(cls, rangeList, fileName):
         newFile = cls._zomboidPath.joinpath(f"Lua/chunk_lists/{fileName}")
-        with open(newFile) as openFile:
+        with open(newFile, "w") as openFile:
             for fileName in rangeList:
                 openFile.write(fileName+"\n")
             
     @classmethod
     def delete_chunks(cls, rangeList):
         for row in rangeList:
-            Path(cls._zomboidSave.joinpath(row)).unlink()
+            row = f"map_{row}.bin"
+            path = cls._zomboidSave.joinpath(row)
+            if Path(path).exists():
+                Path(path).unlink()
 
     @classmethod
     def alias_creation(cls):

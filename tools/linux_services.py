@@ -9,10 +9,6 @@ def sys_calls(command, serviceFile):
     except CalledProcessError as e:
         print(f"An error occured: {e}.")
 
-def start_all_services():
-    for file in LinuxFiles.get_sysd_files():
-        sys_calls("start", file)
-
 def core_service(command):
     sys_calls(command, "zomboid_core.service")
 

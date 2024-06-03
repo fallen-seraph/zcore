@@ -3,9 +3,9 @@ from tools.linux_files import LinuxFiles
 def range_generator(locationX1, locationY1, locationX2, locationY2):
     mapFileList = []
 
-    for x in range(locationX1, locationY1+1):
-        for y in range (locationX2, locationY2+1):
-            mapFileList.append(f"map_{str(x)}_{str(y)}.bin")
+    for x in range(locationX1, locationX2+1):
+        for y in range(locationY1, locationY2+1):
+            mapFileList.append(f"{x}_{y}")
 
     return mapFileList
 
@@ -23,10 +23,8 @@ def chunks_by_range(chunkOne, chunkTwo, file_name):
 def chunks_by_file(file):
     rangeList = []
 
-    with open(file) as openFile:
+    with file as openFile:
         fileContents = openFile.read()
-    rawList = list(filter(None, fileContents.split("\n")))
-    for x in rawList:
-        rangeList.append(f"map_{x}.bin")
+    rangeList = list(filter(None, fileContents.split("\n")))
 
     LinuxFiles.delete_chunks(rangeList)
