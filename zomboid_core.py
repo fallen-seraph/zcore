@@ -30,7 +30,7 @@ def main():
                 chunks.chunks_by_range(args.chunk_one, args.chunk_two,
                     args.file_name)
         case "ban":
-            ban.ban_handler(args.file)
+            ban.console_ban_handler(args.file)
         case _:
             if args.skimmer:
                 debug_skimmer.monitor_directory()
