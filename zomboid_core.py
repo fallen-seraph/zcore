@@ -25,7 +25,7 @@ def main():
                     args.stop)
         case "chunk":
             if args.range:
-               chunks.chunks_by_range(args.chunkOne, args.chunkTwo,
+                chunks.chunks_by_range(args.chunkOne, args.chunkTwo,
                     args.file_name)
             else:
                 chunks.chunks_by_file(args.file)

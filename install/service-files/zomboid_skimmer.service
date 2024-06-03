@@ -5,7 +5,7 @@ Description=Runs the apa bus stop teleporter script
 WorkingDirectory=%h/zcore/tools/
 RestartSec=5
 Restart=always
-ExecStart=/usr/bin/python3 -u %h/zcore/tools/skimmers/log_processsing.py
+ExecStart=/usr/bin/python3 %h/zcore/zomboid_core.py -sk
 StandardOutput=truncate:%h/zcore/logs/skim_out.log
 StandardError=truncate:%h/zcore/logs/skim_err.log
 

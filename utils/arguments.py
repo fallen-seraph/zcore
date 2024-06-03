@@ -74,5 +74,8 @@ def CMD_line_args():
     parser_ban.add_argument("-f", "--file", required=True, 
         type=argparse.FileType('r'), help="File with a list of chunk "
         "coordinates.")
-
+    
+    subparsers.add_parser("skimmer", help="Stops the server instead "
+        "of starting it after restart.")
+    
     return parser.parse_args()
