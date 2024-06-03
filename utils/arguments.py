@@ -9,7 +9,6 @@ def install_commands(subparsers):
         help="install a service individually")
     
 def restart_commands(subparsers):
-    #setup mutual exclusives
     parser_restart = subparsers.add_parser("restart", help="Initiates a "
         "server restart. Default message and timing.")
     
@@ -44,7 +43,7 @@ def chunk_commands(subparsers):
     parser_chunk.add_argument("-f", "--file", default=None, dest="file",
         type=argparse.FileType('r'), help="File with a list of chunk "
         "coordinates.")
-
+    
     range = parser_chunk.add_subparsers(dest="range")
     range_sub_commands = range.add_parser("range")
     range_sub_commands.add_argument("chunk_one", metavar="X_Y", type=str,
@@ -58,6 +57,10 @@ def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
         "Basic tools available from the command line. More functionaliy "
         "available in discord")
+    
+    parser.add_argument("--skimmer", dest="skimmer", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--report", dest="report", action="store_true", help=argparse.SUPPRESS)
+    
     subparsers = parser.add_subparsers(dest="command")
 
     install_commands(subparsers)
@@ -74,8 +77,5 @@ def CMD_line_args():
     parser_ban.add_argument("-f", "--file", required=True, 
         type=argparse.FileType('r'), help="File with a list of chunk "
         "coordinates.")
-    
-    subparsers.add_parser("skimmer", help=argparse.SUPPRESS)
-    subparsers.add_parser("report", help=argparse.SUPPRESS)
     
     return parser.parse_args()

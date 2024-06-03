@@ -24,17 +24,20 @@ def main():
                 restart.restart_handler(args.message, args.delay, args.backup,
                     args.stop)
         case "chunk":
-            if args.range:
-                chunks.chunks_by_range(args.chunkOne, args.chunkTwo,
-                    args.file_name)
-            else:
+            if not args.range:
                 chunks.chunks_by_file(args.file)
+            else:
+                chunks.chunks_by_range(args.chunk_one, args.chunk_two,
+                    args.file_name)
         case "ban":
             ban.ban_handler(args.file)
-        case "skimmer":
-            debug_skimmer.monitor_directory()
         case _:
-            print("temp")
+            if args.skimmer:
+                debug_skimmer.monitor_directory()
+            elif args.report:
+                print("report")
+            else:
+                print("empty")
 
 def install_mode(service):
     print("Hello, and welcome to the A Path Above computer aided "
