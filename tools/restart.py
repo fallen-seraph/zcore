@@ -20,18 +20,6 @@ def send_message(fullMessage):
 def instant_restart():
     linux_services.core_service("restart")
 
-def stop_and_start(triggerBackup, stop):
-    linux_services.core_service("stop")
-    LinuxFiles.delete_map_sand() 
-
-    if triggerBackup:
-        backup.backup_handler()
-        if config.dynamicLootEnabled:
-            dynamic_loot()
-            
-    if not stop:
-        linux_services.core_service("start")
-
 def cancel_restart():
     linux_services.sys_calls("stop", "zomboid_reboot.service")
     send_message("Reboot cancelled")
@@ -45,6 +33,18 @@ def dynamic_loot():
         newContents = iniFile.replace(oldValue.group(0),
             "HoursForLootRespawn=10")
         LinuxFiles.write_ini_file(newContents)
+        
+def stop_and_start(triggerBackup, stop):
+    linux_services.core_service("stop")
+    LinuxFiles.delete_map_sand() 
+
+    if triggerBackup:
+        backup.backup_handler()
+        if config.dynamicLootEnabled:
+            dynamic_loot()
+            
+    if not stop:
+        linux_services.core_service("start")
 
 def restart_handler(message, delay, triggerBackup, stop):
     try:
@@ -106,5 +106,4 @@ def restart_schedular():
             print("6 hour reboot")
             restart_handler(None, None, False, False)
         else:
-            print("mod update")
             lgsm.lgsm_passthrough("checkModsNeedUpdate")
