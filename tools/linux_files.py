@@ -114,7 +114,7 @@ class LinuxFiles:
     @classmethod
     def remove_oldest_backup(cls, date):
         for backup in cls.get_daily_backup_files():
-            if backup == date + "_backup.tar.gz":
+            if backup == f"{date}_backup.tar.gz":
                 Path(cls._dailyBackups.joinpath(backup)).unlink()
 
     @classmethod
