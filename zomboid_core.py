@@ -1,7 +1,7 @@
 from utils import arguments
 from tools import backup, ban, chunks, restart
 from install import linux_installer
-from tools.skimmers import debug_skimmer
+from tools.skimmers import skimmer_main
 
 import time
 
@@ -33,7 +33,7 @@ def main():
             ban.console_ban_handler(args.file)
         case _:
             if args.skimmer:
-                debug_skimmer.monitor_directory()
+                skimmer_main.monitor_directory()
             elif args.report:
                 print("report")
             else:
