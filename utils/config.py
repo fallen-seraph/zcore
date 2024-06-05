@@ -31,10 +31,13 @@ cparser.read(f"{LinuxFiles.get_home()}/zcore/config.ini")
 try:
     backupRetentionDays = cparser.getint('BACKUPS', 'backupRetentionDays')
     dailyBackupTime = validate_time(cparser.get('BACKUPS', 'dailyBackupTime'))
-    dailyBackupTimeZone = validate_time_zone(cparser.get('BACKUPS', 'dailyBackupTimeZone'))
+    dailyBackupTimeZone = validate_time_zone(cparser.get('BACKUPS',
+        'dailyBackupTimeZone'))
 
-    dynamicLootEnabled = cparser.getboolean('DYNAMIC.LOOT', 'dynamicLootEnabled')
-    dynamicLootRange = validate_range(cparser.get('DYNAMIC.LOOT', 'dynamicLootRange'))
+    dynamicLootEnabled = cparser.getboolean('DYNAMIC.LOOT',
+        'dynamicLootEnabled')
+    dynamicLootRange = validate_range(cparser.get('DYNAMIC.LOOT',
+        'dynamicLootRange'))
 
     playerNotificationURL = cparser.get('DISCORD', 'playerNotificationURL')
     adminNotificationURL = cparser.get('DISCORD', 'adminNotificationURL')

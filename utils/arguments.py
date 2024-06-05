@@ -58,8 +58,10 @@ def CMD_line_args():
         "Basic tools available from the command line. More functionaliy "
         "available in discord")
     
-    parser.add_argument("--skimmer", dest="skimmer", action="store_true", help=argparse.SUPPRESS)
-    parser.add_argument("--report", dest="report", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--skimmer", dest="skimmer", action="store_true",
+        help=argparse.SUPPRESS)
+    parser.add_argument("--report", dest="report", action="store_true",
+        help=argparse.SUPPRESS)
     
     subparsers = parser.add_subparsers(dest="command")
 

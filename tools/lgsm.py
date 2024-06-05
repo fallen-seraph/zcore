@@ -44,7 +44,8 @@ def teleport_to(name, x, y, z):
 
 def lgsm_passthrough(command):
     try:
-        result = subprocess.run([f"{LinuxFiles.get_pzlgsm()}/pzserver", "send", command], check=True, text=True, capture_output=True)
+        result = subprocess.run([f"{LinuxFiles.get_pzlgsm()}/pzserver",
+            "send", command], check=True, text=True, capture_output=True)
         return result
     except CalledProcessError as e:
         sys.exit(f"{e}.")

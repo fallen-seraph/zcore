@@ -14,7 +14,8 @@ def crash_report():
     discord.discord_admin_notifications(diskReport)
 
     try:
-        journalReport = run(["journalctl", "--user", "-qn20"], stdout=PIPE, text=True).stdout
+        journalReport = run(["journalctl", "--user", "-qn20"], stdout=PIPE,
+            text=True).stdout
     except CalledProcessError as e:
         print(f"Disk Report failed: {e}")
 

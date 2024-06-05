@@ -13,14 +13,17 @@ def core_service(command):
 
 def get_service_status(service_name):
     try:
-        result = run(["systemctl", "--user", "show", service_name, "--property=ActiveState"], stdout=PIPE, text=True)
+        result = run(["systemctl", "--user", "show", service_name,
+            "--property=ActiveState"], stdout=PIPE, text=True)
         return result.stdout.strip().split("=")
     except CalledProcessError as e:
         sys.exit(f"An error occured: {e}.")
 
 def get_service_info(service_name):
     try:
-        result = run(["systemctl", "--user", "show", service_name, "--property=ActiveEnterTimestamp,ActiveState"], stdout=PIPE, text=True)
+        result = run(["systemctl", "--user", "show", service_name, 
+            "--property=ActiveEnterTimestamp,ActiveState"],
+            stdout=PIPE, text=True)
         return result.stdout.strip().split("\n")
     except CalledProcessError as e:
         sys.exit(f"An error occured: {e}.")
