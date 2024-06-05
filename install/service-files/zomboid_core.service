@@ -1,5 +1,5 @@
 [Unit]
-Description=Project Zomboid Server
+Description=Project Zomboid Server Core Service
 StartLimitIntervalSec=300
 StartLimitBurst=2
 OnFailure=apa_notify.service

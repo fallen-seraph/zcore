@@ -1,5 +1,5 @@
 [Unit]
-Description=Runs the apa bus stop teleporter script
+Description=Skims the logs for mod reboots and steam connection failures.
 
 [Service]
 WorkingDirectory=%h/zcore

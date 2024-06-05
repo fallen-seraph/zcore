@@ -1,5 +1,5 @@
 [Unit]
-Description=timer to run the reboot service
+Description=Timer starts the reboot service every 10 minutes. The timing is specifically to regularly check for mod updates.
 
 [Timer]
 OnCalendar=*:0,10,20,30,40,50

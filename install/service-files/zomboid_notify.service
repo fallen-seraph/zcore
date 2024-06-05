@@ -1,5 +1,5 @@
 [Unit]
-Description=Runs the notify script to gather info and send it to discord.
+Description=Generates a report of information from the server if the core starter fails more than twice. 
 
 [Service]
 WorkingDirectory=%h/zcore
