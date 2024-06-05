@@ -13,7 +13,6 @@ from utils import config
 
 
 def send_message(fullMessage):
-    print(fullMessage)
     lgsm.send_server_message(fullMessage)
     discord.discord_player_notifications(fullMessage)
 
@@ -42,9 +41,13 @@ def stop_and_start(triggerBackup, stop):
         backup.backup_handler()
         if config.dynamicLootEnabled:
             dynamic_loot()
+        
             
     if not stop:
         linux_services.core_service("start")
+        time.sleep(15)
+        discord.discord_player_notifications("Server starting")
+
 
 def restart_handler(message, delay, triggerBackup, stop):
     try:
@@ -99,11 +102,9 @@ def restart_schedular():
         sixHoursAfterStart = activeTime + timedelta(hours=6)
 
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
-            print("Restart and 15 minute backup")
             restart_handler("a restart and a 15 minute backup",
                 None, True, False)
         elif sixHoursAfterStart < currentTime:
-            print("6 hour reboot")
             restart_handler(None, None, False, False)
         else:
             lgsm.lgsm_passthrough("checkModsNeedUpdate")
