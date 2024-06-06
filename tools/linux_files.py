@@ -10,6 +10,8 @@ class LinuxFiles:
         ".config/systemd/user")
     _dailyBackups = pathlib.PurePosixPath(_home).joinpath("backups")
     _pzlgsm = pathlib.PurePosixPath(_home).joinpath("pzlgsm")
+    _zcore = pathlib.PurePosixPath(_home).joinpath("zcore")
+    _processTracker = pathlib.PurePosixPath(_zcore).joinpath("tools/skimmers/.process_tracker")
     _zomboidPath = pathlib.PurePosixPath(_home).joinpath("Zomboid/")
     _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
@@ -169,3 +171,20 @@ class LinuxFiles:
         sandPath = cls._zomboidSave.joinpath("map_sand.bin")
         if Path(sandPath).exists():
             Path(sandPath).unlink()
+
+    @classmethod
+    def create_process_tracker(cls, name, pid):
+        with open(cls._processTracker, "w") as openfile:
+            openfile.write(f"{name},{pid}")
+
+    @classmethod
+    def get_process_tracker(cls):
+        if Path(cls._processTracker).exists():
+            with open(cls._processTracker, "r") as openfile:
+                processes = openfile.readlines()
+            return processes
+
+    @classmethod
+    def clear_process_tracker(cls):
+        if Path(cls._processTracker).exists():
+            Path(cls._processTracker).unlink()
