@@ -1,8 +1,10 @@
+import os
+import re
+import sys
+import time
 import pytz
 import random
-import time
-import sys
-import re
+import signal
 from datetime import datetime, timedelta
 
 from tools import linux_services, lgsm, backup, discord
@@ -19,9 +21,17 @@ def send_message(fullMessage):
 def instant_restart():
     linux_services.core_service("restart")
 
-def cancel_restart():
-    linux_services.sys_calls("stop", "zomboid_reboot.service")
-    send_message("Reboot cancelled")
+def cancel_pending_restart(message):
+    processes = LinuxFiles.get_process_tracker()
+    for process in processes:
+        name, pid = process.split(",")
+        if name == "zcore-update-reboot":
+            os.kill(int(pid), signal.SIGTERM)
+    LinuxFiles.clear_process_tracker
+    if message:
+        send_message(message)
+    else:
+        send_message("Reboot cancelled")
 
 def dynamic_loot():
     low, high = config.dynamicLootRange
@@ -102,6 +112,7 @@ def restart_schedular():
         sixHoursAfterStart = activeTime + timedelta(hours=6)
 
         if currentTime.strftime("%H:%M") == backupTime.strftime("%H:%M"):
+            time.sleep(300)
             restart_handler("a restart and a 15 minute backup",
                 None, True, False)
         elif sixHoursAfterStart < currentTime:
