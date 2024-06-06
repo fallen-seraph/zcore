@@ -1,7 +1,6 @@
 import sys
 from subprocess import run, PIPE, CalledProcessError
 
-
 def sys_calls(command, serviceFile):
     try:
         run(["systemctl", "--user", command, serviceFile])

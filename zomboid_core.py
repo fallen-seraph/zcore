@@ -1,6 +1,6 @@
 from utils import arguments
-from tools import backup, ban, chunks, restart
 from install import linux_installer
+from tools import backup, ban, chunks, restart
 from tools.skimmers import skimmer_main
 
 import time
@@ -17,7 +17,7 @@ def main():
             if args.scheduled:
                 restart.restart_schedular()
             elif args.cancel:
-                restart.cancel_restart()
+                restart.cancel_pending_restart(args.message)
             elif args.instant:
                 restart.instant_restart()
             else:
@@ -33,7 +33,7 @@ def main():
             ban.console_ban_handler(args.file)
         case _:
             if args.skimmer:
-                skimmer_main.monitor_directory()
+                skimmer_main.monitor_logs()
             elif args.report:
                 print("report")
             else:
