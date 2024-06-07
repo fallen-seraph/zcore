@@ -16,8 +16,8 @@ def restart_commands(subparsers):
     exclusive_group.add_argument("-i", "--instant", default=None,
         action="store_true", help="Instantly restarts the server. "
         "USE CAREFULLY!")
-    exclusive_group.add_argument("-c", "--cancel", default=None,
-        action="store_true", help="Cancels a timed reboot.")
+    exclusive_group.add_argument("-c", "--cancel", default="Reboot Cancelled",
+        help="Cancels a timed reboot.")
     exclusive_group.add_argument("-sc", "--scheduled", default=None,
         action="store_true", help="Initiates the scheduled reboots.")
     
