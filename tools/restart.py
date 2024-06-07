@@ -58,8 +58,11 @@ def stop_and_start(triggerBackup, stop):
         time.sleep(15)
         discord.discord_player_notifications("Server starting")
 
+    linux_services.sys_calls("start", "zomboid_reboot.timer")
+
 
 def restart_handler(message, delay, triggerBackup, stop):
+    linux_services.sys_calls("stop", "zomboid_reboot.timer")
     try:
         ShutdownDelay = DelayCalculator(int(delay))
     except ValueError as verr:
