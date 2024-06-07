@@ -1,4 +1,3 @@
-
 from subprocess import run, PIPE, CalledProcessError
 
 from tools import discord

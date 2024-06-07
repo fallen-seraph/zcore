@@ -6,52 +6,64 @@ Core set of utilities and scripts to deploy and service zomboid with [lgsm](http
 
 Assuming Ubuntu 22
 Add a new user of your choice
-
 ```bash
 adduser [username]
 ```
 
-Install prereqs
-
+Install linux prereqs
 ```bash
-sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-pytzdata python3-watchdog
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip
 ```
 
 Logout from root and into the user created above. This is necessary for systemctl --user statements to correctly run. 
+
+The zcore needs to be unzipped to your home directory for all the pathing to be correct.
+
+Install python modules
+```bash
+pip install -r ~/zcore/requirements.txt
+```
 
 ## Usage
 
 Update the config.json file to apply to your system.
 
 If you need a full system install use the following. 
-
 ```bash
 python3 ~/zcore/zomboid_core.py install
 ```
 
 If you already have zomboid installed and it's installed to ~/Zomboid then run the following to install sysd and misc.
-
-``````bash
+```bash
 python3 ~/zcore/zomboid_core.py install sysd
 python3 ~/zcore/zomboid_core.py install misc
 ```
 
-Available Commands from the console:
-
+After running `install` or `install misc` you can log out and log back in or run the following to update aliases.
 ```bash
-#<required>
-#<required|choose|one>
-#[Optional]
-#[Optional|Choose|one]
+. ~/.bash_aliases
+```
 
-#Installs lgsm, and systemctl files. Optionally you can install each piece individually.
-zomboid_core.py install --install-target [lgsm|sysd|misc]
-#Initiates a 15 minute reboot with a full backup.
-zomboid_core.py backup
-#Initiates a 15 minute reboot or stop, optional message.
-zomboid_core.py restart [optional-message]
-#Chunk tools, restore defaults to daily backup.
-zomboid_core.py chunk <remove|restore>  <chunk|range> <###_###|x1,y1,x2,y2> [daily|recent]
-#Parses a .txt file formated with each steamid per line.
-zomboid_core.py banparse <file>
+From here you can use `zcore -h` or `zcore [command] -h` to view arguments as needed for commands. 
+
+Systemctl services installed and enabled:
+zomboid_core.service - Zomboid Server
+zomboid_reboot.service - Runs the restart Schedular
+zomboid_reboot.timer - Triggers zomboid_reboot.service every 10 minutes
+zomboid_notify.service - Is triggered if the zomboid server fails to restart itself twice
+zomboid_skimmer.service - Scrapes the debug log for mod reboots and steam mainteance starts.
+
+Start the server with:
+```bash
+systemctl --user start zomboid_core
+```
+
+Start the reboot timer with:
+```bash
+systemctl --user start zomboid_reboot.timer
+```
+
+Start the log scraper:
+```bash
+systemctl --user start zomboid_skimmer
 ```

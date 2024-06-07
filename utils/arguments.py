@@ -2,8 +2,7 @@ import argparse
 
 def install_commands(subparsers):
     parser_install = subparsers.add_parser("install", help="Deploys lgsm, "
-        "and sysd files. Follow install with --install-target "
-        "[service] to deploy a service individually.")
+        "and sysd files.")
     parser_install.add_argument("-it", "--install_target", choices=["lgsm", 
         "sysd", "misc"], default=None, dest="target",
         help="install a service individually")
@@ -22,7 +21,7 @@ def restart_commands(subparsers):
         action="store_true", help="Initiates the scheduled reboots.")
     
     normal_restart_group = parser_restart.add_argument_group("Custom Restart",
-        "Options ignored if -c or -i are used.")
+        "Options ignored if -c, -i, or -sc are used.")
     normal_restart_group.add_argument("-m", "--message", default=None,
         dest="message", help="Provided message to make a part of restart "
         "message.")
@@ -55,8 +54,7 @@ def chunk_commands(subparsers):
 
 def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
-        "Basic tools available from the command line. More functionaliy "
-        "available in discord")
+        "Basic tools available from the command line.")
     
     parser.add_argument("--skimmer", dest="skimmer", action="store_true",
         help=argparse.SUPPRESS)
@@ -68,7 +66,7 @@ def CMD_line_args():
     install_commands(subparsers)
     
     subparsers.add_parser("backup", help="Runs a rsync backup, "
-        "compresses it, deletes the configured oldest backup.")
+        "compresses it, deletes the configured oldest backups.")
     
     restart_commands(subparsers)
 
@@ -77,7 +75,6 @@ def CMD_line_args():
     parser_ban = subparsers.add_parser("ban", help="Takes a file with a "
         "list of steamids to be banned.")
     parser_ban.add_argument("-f", "--file", required=True, 
-        type=argparse.FileType('r'), help="File with a list of chunk "
-        "coordinates.")
+        type=argparse.FileType('r'), help="File with a list of bans.")
     
     return parser.parse_args()
