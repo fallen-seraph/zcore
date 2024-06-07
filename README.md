@@ -12,16 +12,19 @@ adduser [username]
 
 Install linux prereqs
 ```bash
-sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install -y binutils bsdmainutils bzip2 lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 openjdk-21-jre pigz rng-tools5 steamcmd unzip python3-pip
 ```
 
 Logout from root and into the user created above. This is necessary for systemctl --user statements to correctly run. 
 
 The zcore needs to be unzipped to your home directory for all the pathing to be correct.
+```bash
+unzip ~/source.zip
+```
 
 Install python modules
 ```bash
-pip install -r ~/zcore/requirements.txt
+pip install -r ~/zcore/requirements.txt --break-system-packages
 ```
 
 ## Usage
