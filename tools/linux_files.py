@@ -3,6 +3,7 @@ import secrets
 import shutil
 import pathlib
 from pathlib import Path
+import collections
 
 class LinuxFiles:
     _home = Path.home()
@@ -116,7 +117,7 @@ class LinuxFiles:
     @classmethod
     def remove_oldest_backup(cls, date):
         for backup in cls.get_daily_backup_files():
-            if backup == f"{date}_backup.tar.gz":
+            if date in backup:
                 Path(cls._dailyBackups.joinpath(backup)).unlink()
 
     @classmethod
@@ -188,3 +189,9 @@ class LinuxFiles:
     def clear_process_tracker(cls):
         if Path(cls._processTracker).exists():
             Path(cls._processTracker).unlink()
+
+    @classmethod
+    def latest_debug_log(cls):
+        debugLogs = sorted(Path(cls._zomboidLogs).glob("*Debug*"))
+        with (debugLogs[len(debugLogs)-1], "r") as openLog:
+            return collections.deque(openLog, 20)
