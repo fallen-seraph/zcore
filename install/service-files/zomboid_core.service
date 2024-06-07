@@ -1,0 +1,16 @@
+[Unit]
+Description=Project Zomboid Server Core Service
+StartLimitIntervalSec=300
+StartLimitBurst=2
+OnFailure=apa_notify.service
+
+[Service]
+Type=forking
+WorkingDirectory=%h
+ExecStart=%h/pzlgsm/pzserver start
+ExecStop=%h/pzlgsm/pzserver stop
+Restart=on-failure
+RestartSec=40
+
+[Install]
+WantedBy=multi-user.target

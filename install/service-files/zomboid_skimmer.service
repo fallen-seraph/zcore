@@ -1,0 +1,14 @@
+[Unit]
+#Skims the logs for mod reboots and steam connection failures.
+Description=Debug Log Scraping Service
+
+[Service]
+WorkingDirectory=%h/zcore
+RestartSec=5
+Restart=always
+ExecStart=/usr/bin/python3 %h/zcore/zomboid_core.py --skimmer
+StandardOutput=truncate:%h/zcore/logs/skim_out.log
+StandardError=truncate:%h/zcore/logs/skim_err.log
+
+[Install]
+WantedBy=multi-user.target
