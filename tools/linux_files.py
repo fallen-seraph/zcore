@@ -193,5 +193,6 @@ class LinuxFiles:
     @classmethod
     def latest_debug_log(cls):
         debugLogs = sorted(Path(cls._zomboidLogs).glob("*Debug*"))
-        with (debugLogs[len(debugLogs)-1], "r") as openLog:
-            return collections.deque(openLog, 20)
+        debugLogFiles = len(debugLogs) - 1
+        with open(debugLogs[debugLogFiles], "r") as openLog:
+            return collections.deque(openLog, 10)
