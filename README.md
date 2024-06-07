@@ -4,7 +4,7 @@ Core set of utilities and scripts to deploy and service zomboid with [lgsm](http
 
 ## Pre-Requisits
 
-Assuming Ubuntu 22
+Assuming Ubuntu
 Add a new user of your choice
 ```bash
 adduser [username]
@@ -51,10 +51,10 @@ From here you can use `zcore -h` or `zcore [command] -h` to view arguments as ne
 
 Systemctl services installed and enabled:
 ```bash
-zomboid_core.service - Zomboid Server
-zomboid_reboot.service - Runs the restart Schedular
-zomboid_reboot.timer - Triggers zomboid_reboot.service every 10 minutes
-zomboid_notify.service - Is triggered if the zomboid server fails to restart itself twice
+zomboid_core.service    - Zomboid Server
+zomboid_reboot.service  - Runs the restart Schedular
+zomboid_reboot.timer    - Triggers zomboid_reboot.service every 10 minutes
+zomboid_notify.service  - Is triggered if the zomboid server fails to restart itself twice
 zomboid_skimmer.service - Scrapes the debug log for mod reboots and steam mainteance starts.
 ```
 

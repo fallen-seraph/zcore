@@ -2,7 +2,8 @@
 WantedBy=timers.target
 
 [Unit]
-Description=Starts the restart scheduling function to determine what type of reboot is needed.
+#Starts the restart scheduling function to determine what type of reboot is needed.
+Description=Zomboid Restart Schedular Service
 
 [Service]
 ExecStart=/usr/bin/python3 %h/zcore/zomboid_core.py restart -sc

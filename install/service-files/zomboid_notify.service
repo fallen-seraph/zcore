@@ -1,5 +1,6 @@
 [Unit]
-Description=Generates a report of information from the server if the core starter fails more than twice. 
+#Generates a report of information from the server if the core starter fails more than twice. 
+Description=Zomboid Crash Report Service
 
 [Service]
 WorkingDirectory=%h/zcore

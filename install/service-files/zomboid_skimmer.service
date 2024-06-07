@@ -1,5 +1,6 @@
 [Unit]
-Description=Skims the logs for mod reboots and steam connection failures.
+#Skims the logs for mod reboots and steam connection failures.
+Description=Debug Log Scraping Service
 
 [Service]
 WorkingDirectory=%h/zcore

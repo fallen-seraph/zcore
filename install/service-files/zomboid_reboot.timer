@@ -1,5 +1,6 @@
 [Unit]
-Description=Timer starts the reboot service every 10 minutes. The timing is specifically to regularly check for mod updates.
+#Timer starts the reboot service every 10 minutes. The timing is specifically to regularly check for mod updates.
+Description=Zomboid Restart Schedular Timer
 
 [Timer]
 OnCalendar=*:0,10,20,30,40,50
