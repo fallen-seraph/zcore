@@ -3,7 +3,7 @@ Description=Generates a report of information from the server if the core starte
 
 [Service]
 WorkingDirectory=%h/zcore
-ExecStart=/usr/bin/python3 %h/zcore report
+ExecStart=/usr/bin/python3 %h/zcore --report
 
 [Install]
 WantedBy=multi-user.target
