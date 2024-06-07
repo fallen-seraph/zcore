@@ -21,17 +21,18 @@ def send_message(fullMessage):
 def instant_restart():
     linux_services.core_service("restart")
 
-def cancel_pending_restart(message):
+def cancel_pending_restart(message="Reboot Cancelled"):
     processes = LinuxFiles.get_process_tracker()
-    for process in processes:
-        name, pid = process.split(",")
-        if name == "zcore-update-reboot":
-            os.kill(int(pid), signal.SIGTERM)
-    LinuxFiles.clear_process_tracker
-    if message:
-        send_message(message)
-    else:
-        send_message("Reboot cancelled")
+    if processes:
+        for process in processes:
+            name, pid = process.split(",")
+            if name == "zcore-update-reboot":
+                os.kill(int(pid), signal.SIGTERM)
+        LinuxFiles.clear_process_tracker
+        if message:
+            send_message(message)
+        else:
+            send_message("Reboot cancelled")
 
 def dynamic_loot():
     low, high = config.dynamicLootRange
