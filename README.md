@@ -46,12 +46,12 @@ After running `install` or `install misc` you can log out and log back in or run
 
 From here you can use `zcore -h` or `zcore [command] -h` to view arguments as needed for commands. 
 
-Systemctl services installed and enabled:
-zomboid_core.service - Zomboid Server
-zomboid_reboot.service - Runs the restart Schedular
-zomboid_reboot.timer - Triggers zomboid_reboot.service every 10 minutes
-zomboid_notify.service - Is triggered if the zomboid server fails to restart itself twice
-zomboid_skimmer.service - Scrapes the debug log for mod reboots and steam mainteance starts.
+Systemctl services installed and enabled:\n
+zomboid_core.service - Zomboid Server\n
+zomboid_reboot.service - Runs the restart Schedular\n
+zomboid_reboot.timer - Triggers zomboid_reboot.service every 10 minutes\n
+zomboid_notify.service - Is triggered if the zomboid server fails to restart itself twice\n
+zomboid_skimmer.service - Scrapes the debug log for mod reboots and steam mainteance starts.\n
 
 Start the server with:
 ```bash
