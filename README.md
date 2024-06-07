@@ -23,8 +23,14 @@ unzip ~/source.zip
 ```
 
 Install python modules
+Ubuntu 24:
 ```bash
 pip install -r ~/zcore/requirements.txt --break-system-packages
+```
+
+Ubuntu 23 or lower:
+```bash
+pip install -r ~/zcore/requirements.txt
 ```
 
 ## Usage
