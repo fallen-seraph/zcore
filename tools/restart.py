@@ -33,6 +33,12 @@ def cancel_pending_restart(message="Reboot Cancelled"):
             send_message(message)
         else:
             send_message("Reboot cancelled")
+    else:
+        linux_services.sys_calls("stop", "zomboid_reboot.service")
+        if message:
+            send_message(message)
+        else:
+            send_message()
 
 def dynamic_loot():
     low, high = config.dynamicLootRange
