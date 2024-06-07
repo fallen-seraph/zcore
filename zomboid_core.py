@@ -33,6 +33,8 @@ def main():
                 else:
                     chunks.chunks_by_range(args.chunk_one, args.chunk_two,
                         args.file_name)
+            else:
+                print("Shutdown server or force with --force.")
         case "ban":
             ban.console_ban_handler(args.file)
         case _:
