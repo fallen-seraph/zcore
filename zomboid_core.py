@@ -1,6 +1,6 @@
 from utils import arguments
 from install import linux_installer
-from tools import backup, ban, chunks, restart, report
+from tools import backup, ban, chunks, restart, report, linux_services
 from tools.skimmers import skimmer_main
 
 import time
@@ -24,11 +24,15 @@ def main():
                 restart.restart_handler(args.message, args.delay, args.backup,
                     args.stop)
         case "chunk":
-            if not args.range:
-                chunks.chunks_by_file(args.file)
-            else:
-                chunks.chunks_by_range(args.chunk_one, args.chunk_two,
-                    args.file_name)
+            active = linux_services.get_service_status(
+                "zomboid_core.service")[1]
+            
+            if active != "active" or args.force:
+                if not args.range:
+                    chunks.chunks_by_file(args.file)
+                else:
+                    chunks.chunks_by_range(args.chunk_one, args.chunk_two,
+                        args.file_name)
         case "ban":
             ban.console_ban_handler(args.file)
         case _:

@@ -51,6 +51,9 @@ def chunk_commands(subparsers):
         help="X_Y of second chunk")
     range_sub_commands.add_argument("-fn", "--file_name", default=None,
         type=str, help="name of the file this will generate.")
+    range_sub_commands.add_argument("-f", "--force", default=None,
+        action="store_true", help="Forces chunks to delete even if the "
+        "server is up.")
 
 def CMD_line_args():
     parser = argparse.ArgumentParser(prog="zomboid_core.py", description=
