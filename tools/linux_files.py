@@ -46,6 +46,10 @@ class LinuxFiles:
         return self._zomboidSave
     
     @property
+    def zomboidLogs(self):
+        return self._zomboidLogs
+    
+    @property
     def serverini(self):
         return self._serverini
     
