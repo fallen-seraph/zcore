@@ -30,10 +30,6 @@ def add_item(name, item):
     if name:
         lgsm_passthrough(f"additem \"{name}\" {item}")
 
-def port_player(name, direction):
-    if name:
-        lgsm_passthrough(f"portplayer {direction} \"{name}\"")
-
 def set_access_level(name, accessLevel):
     if name:
         lgsm_passthrough(f"setaccesslevel \"{name}\" {accessLevel}")
