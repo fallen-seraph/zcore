@@ -14,7 +14,7 @@ def debug_line_process(line):
         process.start()
         LinuxFiles.create_process_tracker(processName, process.pid)
         return process
-    elif re.fullmatch("^\[.*\] LOG  : General.*> Failed to connect to Steam "
+    elif re.match("^\[.*\] LOG  : General.*> Failed to connect to Steam "
         "servers.$", line):
         process = Process(target=steam_down, args=())
         process.start()
