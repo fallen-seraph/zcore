@@ -10,7 +10,8 @@ def debug_line_process(line):
     if re.match("^\[.*\] LOG  : General.*> CheckModsNeedUpdate: Mods need "
         "update\.$", line):
         processName = "zcore-update-reboot"
-        process = Process(target=restart.restart_handler, args=("a mod update", None, False, False), name=processName)
+        process = Process(target=restart.restart_handler, args=(
+            "a mod update", None, False, False), name=processName)
         process.start()
         LinuxFiles.create_process_tracker(processName, process.pid)
         return process
