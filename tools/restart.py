@@ -82,6 +82,12 @@ def restart_handler(message, delay, triggerBackup, stop):
     else:
         baseMessage = "Restarting the server for a scheduled reboot"
 
+    targetRebootTime = ShutdownDelay.getTargetTime()
+
+    targetTimeMessage = " ".join([baseMessage, "at", f"<t:{targetRebootTime}:t>"])
+
+    discord.discord_player_notifications(targetTimeMessage)
+
     reboot_intervals = ShutdownDelay.get_all_intervals()
     for x in reboot_intervals:
         if not x == 1:
