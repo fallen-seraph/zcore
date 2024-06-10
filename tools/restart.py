@@ -84,7 +84,8 @@ def restart_handler(message, delay, triggerBackup, stop):
 
     targetRebootTime = ShutdownDelay.getTargetTime()
 
-    targetTimeMessage = " ".join([baseMessage, "at", f"<t:{targetRebootTime}:t>"])
+    targetTimeMessage = " ".join([baseMessage, "at",
+        f"<t:{targetRebootTime}:t>"])
 
     discord.discord_player_notifications(targetTimeMessage)
 
