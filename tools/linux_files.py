@@ -12,7 +12,8 @@ class LinuxFiles:
     _dailyBackups = pathlib.PurePosixPath(_home).joinpath("backups")
     _pzlgsm = pathlib.PurePosixPath(_home).joinpath("pzlgsm")
     _zcore = pathlib.PurePosixPath(_home).joinpath("zcore")
-    _processTracker = pathlib.PurePosixPath(_zcore).joinpath("tools/skimmers/.process_tracker")
+    _processTracker = pathlib.PurePosixPath(_zcore).joinpath(
+        "tools/skimmers/.process_tracker")
     _zomboidPath = pathlib.PurePosixPath(_home).joinpath("Zomboid/")
     _zomboidSave = pathlib.PurePosixPath(_zomboidPath).joinpath(
         "Saves/Multiplayer/pzserver")
