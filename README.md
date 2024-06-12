@@ -21,6 +21,7 @@ The zcore needs to be unzipped to your home directory for all the pathing to be 
 ```bash
 unzip ~/source.zip
 ```
+## Update the config.ini found in the zcore folder.
 
 Install python modules
 Ubuntu 24:
