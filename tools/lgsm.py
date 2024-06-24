@@ -15,9 +15,9 @@ def unban_id(steam_id):
     if steam_id:
         lgsm_passthrough(f"unbanid {steam_id}")
 
-def kick_user(name):
-    if name:
-        lgsm_passthrough(f"kickuser {name}")
+def kick_user(name, reason):
+    if name and reason:
+        lgsm_passthrough(f"kickuser \"{name}\" -r \"{reason}\"")
 
 def send_server_message(message):
     if message:

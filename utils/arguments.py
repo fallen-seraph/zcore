@@ -68,8 +68,11 @@ def CMD_line_args():
 
     install_commands(subparsers)
     
-    subparsers.add_parser("backup", help="Runs a rsync backup, "
+    parser_backup = subparsers.add_parser("backup", help="Runs a rsync backup, "
         "compresses it, deletes the configured oldest backups.")
+    parser_backup.add_argument("-fo, --force", dest="backupForce",
+        action="store_true", help="Forces the backup to run even if the server "
+        "is online.")
     
     restart_commands(subparsers)
 
