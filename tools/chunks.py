@@ -1,4 +1,4 @@
-from tools.linux_files import LinuxFiles
+from tools import fileManager
 
 def range_generator(locationX1, locationY1, locationX2, locationY2):
     mapFileList = []
@@ -10,21 +10,23 @@ def range_generator(locationX1, locationY1, locationX2, locationY2):
     return mapFileList
 
 def chunks_by_range(chunkOne, chunkTwo, file_name):
+    chunkFiles = fileManager.ZomboidChunks()
     locationX1, locationY1 = map(int, chunkOne.split("_"))
     locationX2, locationY2 = map(int, chunkTwo.split("_"))
 
     range = range_generator(locationX1, locationY1, locationX2, locationY2)
 
     if file_name:
-        LinuxFiles.chunks_to_file(range, file_name)
+        chunkFiles.chunk_list_to_file(range, file_name)
     else:
-        LinuxFiles.delete_chunks(range)
+        chunkFiles.delete_chunks(range)
 
 def chunks_by_file(file):
+    chunkFiles = fileManager.ZomboidChunks()
     rangeList = []
 
     with file as openFile:
         fileContents = openFile.read()
     rangeList = list(filter(None, fileContents.split("\n")))
 
-    LinuxFiles.delete_chunks(rangeList)
+    chunkFiles.delete_chunks(rangeList)

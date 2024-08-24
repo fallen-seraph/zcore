@@ -1,7 +1,7 @@
 import sys
 import subprocess
 from subprocess import CalledProcessError
-from tools.linux_files import LinuxFiles
+from tools import fileManager
 
 def add_user(name, password):
     if name and password:
@@ -39,8 +39,9 @@ def teleport_to(name, x, y, z):
         lgsm_passthrough(f"teleportto \"{name}\" {x},{y},{z}") 
 
 def lgsm_passthrough(command):
+    coreFiles = fileManager.CoreFiles()
     try:
-        result = subprocess.run([f"{LinuxFiles.get_pzlgsm()}/pzserver",
+        result = subprocess.run([coreFiles.pzlgsm / "pzserver",
             "send", command], check=True, text=True, capture_output=True)
         return result
     except CalledProcessError as e:
