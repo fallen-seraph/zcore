@@ -2,10 +2,8 @@ import os
 import secrets
 import shutil
 import collections
-import pathlib
 from pathlib import Path
 from functools import cached_property
-
 
 class CoreFiles:
     def __init__(self):
@@ -49,28 +47,27 @@ class CoreFiles:
     
 class LinuxFileSystem(CoreFiles):    
     def create_user_sysd_folder(self):
-        Path(self.systemctlPath).mkdir(parents=True, exist_ok=True)
+        self.systemctlPath.mkdir(parents=True, exist_ok=True)
     
     def copy_packaged_sysd_files(self):
         self.create_user_sysd_folder()
 
-        path = pathlib.PurePosixPath(
-            f"{self._home}/zcore/install/service-files")
+        sysdFilePath = self._home / "zcore/install/service-files"
         
-        files = [x.name for x in os.scandir(path) if x.is_file()]
+        packagedSYSDFiles = [x.name for x in os.scandir(sysdFilePath) if x.is_file()]
 
-        for fileName in files:
-            shutil.copy2(f"{path}/{fileName}", self.systemctlPath)
+        for fileName in packagedSYSDFiles:
+            shutil.copy2(f"{sysdFilePath}/{fileName}", self.systemctlPath)
 
-        return files
+        return packagedSYSDFiles
     
     def get_sysd_files(self):
         return [x.name for x in os.scandir(self.systemctlPath) if x.is_file()]
     
     def alias_creation(self):
         aliasFile = self._home / ".bash_aliases"
-        if not Path(aliasFile).exists():
-            Path(aliasFile).touch(mode=0o700)
+        if not aliasFile.exists():
+            aliasFile.touch(mode=0o700)
         with open(aliasFile, "a") as openFile:
             openFile.write(f"alias zcore='/usr/bin/python3 {self._home}/"
                 f"zcore/zomboid_core.py'\nalias pzserver='"
@@ -90,17 +87,17 @@ class GlobalZomboidBackups(CoreFiles):
     
 class LGSMFiles(CoreFiles):
     def create_pzlgsm_directory(self):
-        Path(self.pzlgsm).mkdir(exist_ok=True)
+        self.pzlgsm.mkdir(exist_ok=True)
 
     def create_lgsm_file(self):
         lgsmFilePath = self.pzlgsm / "linuxgsm.sh"
-        Path(lgsmFilePath).touch(mode=0o700)
+        lgsmFilePath.touch(mode=0o700)
         return self.pzlgsm, lgsmFilePath
     
     def default_server_password(self):
         configFile = self.pzlgsm / "lgsm/config-lgsm/pzserver/common.cfg"
         password = secrets.token_urlsafe(15)
-        if Path(configFile).exists():
+        if configFile.exists():
             with open(configFile, "a") as openFile:
                 openFile.write(
                     "startparameters=\"-servername ${selfname} "
@@ -112,7 +109,7 @@ class ZomboidChunks(CoreFiles):
         self.chunkListPath = self.zomboidPath / "Lua/chunk_lists"
 
     def create_chunk_directory(self):
-        (self.chunkListPath).mkdir(parents=True, exist_ok=True)
+        self.chunkListPath.mkdir(parents=True, exist_ok=True)
 
     def get_chunk_file_name(self, fileName):
         chunkFilePath = self.chunkListPath / fileName
@@ -129,8 +126,8 @@ class ZomboidChunks(CoreFiles):
         for chunkCoords in chunkList:
             chunkFileName = f"map_{chunkCoords}.bin"
             chunkFilePath = self.zomboidSave / chunkFileName
-            if Path(chunkFilePath).exists():
-                Path(chunkFilePath).unlink()
+            if chunkFilePath.exists():
+                chunkFilePath.unlink()
 
 class ZomboidConfigurationFiles(CoreFiles):
     def open_ini_file(self):
@@ -148,14 +145,14 @@ class ZCoreFiles(CoreFiles):
             openfile.write(f"{name},{pid}")
 
     def get_process_tracker(self):
-        if Path(self.processTracker).exists():
+        if self.processTracker.exists():
             with open(self.processTracker, "r") as openfile:
                 processes = openfile.readlines()
             return processes
 
     def clear_process_tracker(self):
-        if Path(self.processTracker).exists():
-            Path(self.processTracker).unlink()
+        if self.processTracker.exists():
+            self.processTracker.unlink()
 
     def latest_debug_log(self):
         debugLogs = sorted(self.zomboidLogs.glob("*Debug*"))
@@ -166,5 +163,5 @@ class ZCoreFiles(CoreFiles):
 class MiscFileFunctions(CoreFiles):
     def delete_map_sand(self):
         sandPath = self.zomboidSave / "map_sand.bin"
-        if Path(sandPath).exists():
-            Path(sandPath).unlink()
+        if sandPath.exists():
+            sandPath.unlink()
