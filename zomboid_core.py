@@ -12,7 +12,7 @@ def main():
         case "install":
             install_mode(args.target)
         case "backup": 
-            backup.backup_handler()
+            backup.backup_handler(args.backupForce)
         case "restart":
             if args.scheduled:
                 restart.restart_schedular()

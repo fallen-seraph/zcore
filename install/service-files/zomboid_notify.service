@@ -4,7 +4,7 @@ Description=Zomboid Crash Report Service
 
 [Service]
 WorkingDirectory=%h/zcore
-ExecStart=/usr/bin/python3 %h/zcore --report
+ExecStart=/usr/bin/python3 %h/zcore/zomboid_core.py --report
 
 [Install]
 WantedBy=multi-user.target

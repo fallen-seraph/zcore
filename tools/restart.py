@@ -21,7 +21,9 @@ def send_message(fullMessage):
 def instant_restart():
     linux_services.core_service("restart")
 
-def cancel_pending_restart(message="Reboot Cancelled"):
+def cancel_pending_restart(message):
+    if not message:
+        message="Reboot Cancelled"
     processes = LinuxFiles.get_process_tracker()
     if processes:
         for process in processes:
@@ -29,58 +31,35 @@ def cancel_pending_restart(message="Reboot Cancelled"):
             if name == "zcore-update-reboot":
                 os.kill(int(pid), signal.SIGTERM)
         LinuxFiles.clear_process_tracker
-        if message:
-            send_message(message)
-        else:
-            send_message("Reboot cancelled")
     else:
         linux_services.sys_calls("stop", "zomboid_reboot.service")
-        if message:
-            send_message(message)
-        else:
-            send_message()
+        
+    send_message(message)
 
 def dynamic_loot():
     low, high = config.dynamicLootRange
-    random.randrange(low, high)
+    newLootHours = random.randrange(low, high)
     iniFile = LinuxFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
     if oldValue:
         newContents = iniFile.replace(oldValue.group(0),
-            "HoursForLootRespawn=10")
+            f"HoursForLootRespawn={newLootHours}")
         LinuxFiles.write_ini_file(newContents)
-        
-def stop_and_start(triggerBackup, stop):
-    linux_services.core_service("stop")
-    LinuxFiles.delete_map_sand() 
-
-    if triggerBackup:
-        backup.backup_handler()
-        if config.dynamicLootEnabled:
-            dynamic_loot()
-        
-            
-    if not stop:
-        linux_services.core_service("start")
-        time.sleep(15)
-        discord.discord_player_notifications("Server starting")
-
-    linux_services.sys_calls("start", "zomboid_reboot.timer")
-
 
 def restart_handler(message, delay, triggerBackup, stop):
+    if not message:
+        message="a scheduled reboot"
+        
+    baseMessage = f"Restarting the server for {message}"
+
     linux_services.sys_calls("stop", "zomboid_reboot.timer")
+    
     try:
         ShutdownDelay = DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
     except TypeError:
         ShutdownDelay = DelayCalculator()
-
-    if message:
-        baseMessage = f"Restarting the server for {message}"
-    else:
-        baseMessage = "Restarting the server for a scheduled reboot"
 
     targetRebootTime = ShutdownDelay.getTargetTime()
 
@@ -104,7 +83,20 @@ def restart_handler(message, delay, triggerBackup, stop):
     
     time.sleep(30)
 
-    stop_and_start(triggerBackup, stop)
+    linux_services.core_service("stop")
+    LinuxFiles.delete_map_sand() 
+
+    if triggerBackup:
+        thread = backup.backup_handler(True)
+        if config.dynamicLootEnabled:
+            dynamic_loot()
+                
+    if not stop:
+        linux_services.core_service("start")
+        time.sleep(15)
+        linux_services.sys_calls("start", "zomboid_reboot.timer")
+
+    thread.join()
 
 def restart_schedular():
     active, activeTime = linux_services.get_service_info(
