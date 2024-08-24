@@ -53,27 +53,27 @@ def install_mode(service):
     if service:
         print("You've chosen to install the specific module: "
             f"{service}")
-
+    linuxInstaller = linux_installer.Installer()
     match service:
         case "lgsm":
             print("Installing lgsm, this will take a moment.")
-            linux_installer.deploy_lgsm()
+            linuxInstaller.deploy_lgsm()
             print("lgsm install complete")
         case "sysd":
-            linux_installer.deploy_sysd()
+            linuxInstaller.deploy_sysd()
         case "misc":
-            linux_installer.misc_tasks()
+            linuxInstaller.misc_tasks()
         case _:
             print("Installing all modules now.")
-            linux_installer.deploy_lgsm()
+            linuxInstaller.deploy_lgsm()
             print("lgsm install complete")
             time.sleep(10)
             print("Deploying systemd files")
-            linux_installer.deploy_sysd()
+            linuxInstaller.deploy_sysd()
             print("sysd files deployed and activated")
             time.sleep(10)
             print("finalizing tasks")
-            linux_installer.misc_tasks()
+            linuxInstaller.misc_tasks()
             print("install complete")
 
 if __name__ == '__main__':

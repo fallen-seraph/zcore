@@ -1,46 +1,55 @@
 import requests
 import subprocess
 from subprocess import CalledProcessError
-from tools.linux_files import LinuxFiles
+from tools import fileManager
 
-def deploy_lgsm():
-    pzlFolder, file = LinuxFiles.manage_lgsm_files()
-    try:
-        open(file, 'w').write(
-            requests.get("https://linuxgsm.sh").text)
-        
-        subprocess.run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
-            check=True, text=True, shell=False, capture_output=True)
+class Installer():
+    def __init__(self):
+        self.linuxFiles = fileManager.LinuxFileSystem()
 
-        subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder,
-            input='Y\nY\nN\n', check=True, text=True, shell=False)
-        
-        LinuxFiles.default_server_password()
+    def deploy_lgsm(self):
+        lgsmFiles = fileManager.LGSMFiles()
+        lgsmFiles.create_pzlgsm_directory()
+        pzlFolder, file = lgsmFiles.create_lgsm_file()
+        try:
+            open(file, 'w').write(
+                requests.get("https://linuxgsm.sh").text)
+            
+            subprocess.run(["bash", "linuxgsm.sh", "pzserver"], cwd=pzlFolder,
+                check=True, text=True, shell=False, capture_output=True)
 
-    except ConnectionError as e:
-        print(f"Connection Error occured: {e}")
-    except CalledProcessError as e:
-        print(f"An error occured: {e}.")
+            subprocess.run([f"{pzlFolder}/pzserver", "install"], cwd=pzlFolder,
+                input='Y\nY\nN\n', check=True, text=True, shell=False)
+            
+            lgsmFiles.default_server_password()
+
+        except ConnectionError as e:
+            print(f"Connection Error occured: {e}")
+        except CalledProcessError as e:
+            print(f"An error occured: {e}.")
 
 
-def deploy_sysd():
-    LinuxFiles.manage_sysd_files()
+    def deploy_sysd(self):
+        self.linuxFiles.copy_packaged_sysd_files()
 
-    try:
-        subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
-            shell=False)
-        
-        subprocess.run(["systemctl", "--user", "daemon-reload"], check=True,
-            text=True, shell=False)
-        
-        for x in LinuxFiles.get_sysd_files():
-            subprocess.run(["systemctl", "--user", "enable", x], check=True,
+        try:
+            subprocess.run(["loginctl", "enable-linger"], check=True, text=True,
+                shell=False)
+            
+            subprocess.run(["systemctl", "--user", "daemon-reload"], check=True,
                 text=True, shell=False)
-        
-    except CalledProcessError as e:
-        print(f"An error occured: {e}")
+            
+            for x in self.linuxFiles.get_sysd_files():
+                subprocess.run(["systemctl", "--user", "enable", x], check=True,
+                    text=True, shell=False)
+            
+        except CalledProcessError as e:
+            print(f"An error occured: {e}")
 
-def misc_tasks():
-    LinuxFiles.prep_backup_directories()
-    LinuxFiles.prep_chunk_directory()
-    LinuxFiles.alias_creation()
+    def misc_tasks(self):
+        zBackups = fileManager.GlobalZomboidBackups()
+        zBackups.create_backup_directories()
+        zomboidChunks = fileManager.ZomboidChunks()
+        zomboidChunks.prep_chunk_directory()
+        
+        self.linuxFiles.alias_creation()
