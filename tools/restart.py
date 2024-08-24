@@ -49,15 +49,17 @@ def dynamic_loot():
 def restart_handler(message, delay, triggerBackup, stop):
     if not message:
         message="a scheduled reboot"
+        
+    baseMessage = f"Restarting the server for {message}"
+
     linux_services.sys_calls("stop", "zomboid_reboot.timer")
+    
     try:
         ShutdownDelay = DelayCalculator(int(delay))
     except ValueError as verr:
             sys.exit(f"{verr}")
     except TypeError:
         ShutdownDelay = DelayCalculator()
-
-    baseMessage = f"Restarting the server for {message}"
 
     targetRebootTime = ShutdownDelay.getTargetTime()
 
