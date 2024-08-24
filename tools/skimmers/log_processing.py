@@ -2,9 +2,7 @@ import re
 import time
 from multiprocessing import Process
 
-from tools import restart, linux_services, discord
-
-from tools.linux_files import LinuxFiles
+from tools import fileManager, restart, linux_services, discord
 
 def debug_line_process(line):
     if re.match("^\[.*\] LOG  : General.*> CheckModsNeedUpdate: Mods need "
@@ -13,7 +11,8 @@ def debug_line_process(line):
         process = Process(target=restart.restart_handler, args=(
             "a mod update", None, False, False), name=processName)
         process.start()
-        LinuxFiles.create_process_tracker(processName, process.pid)
+        processFiles = fileManager.ZCoreFiles()
+        processFiles.create_process_tracker(processName, process.pid)
         return process
     elif re.match("^\[.*\] LOG  : General.*> Failed to connect to Steam "
         "servers.$", line):

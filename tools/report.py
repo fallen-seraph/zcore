@@ -1,7 +1,7 @@
 from subprocess import run, PIPE, CalledProcessError
 
 from tools import discord
-from tools.linux_files import LinuxFiles
+from tools import fileManager
 
 def crash_report():
     #Crash report generator
@@ -27,7 +27,8 @@ def crash_report():
 
     discord.discord_admin_notifications(journalReport)
 
-    debugLogTail = LinuxFiles.latest_debug_log()
+    zcoreFiles = fileManager.ZCoreFiles()
+    debugLogTail = zcoreFiles.latest_debug_log()
 
     debugLogTail = ''.join(debugLogTail)
 

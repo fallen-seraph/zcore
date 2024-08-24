@@ -7,9 +7,8 @@ import random
 import signal
 from datetime import datetime, timedelta
 
-from tools import linux_services, lgsm, backup, discord
+from tools import fileManager, linux_services, lgsm, backup, discord
 from tools.delay import DelayCalculator
-from tools.linux_files import LinuxFiles
 
 from utils import config
 
@@ -22,29 +21,31 @@ def instant_restart():
     linux_services.core_service("restart")
 
 def cancel_pending_restart(message):
+    processTracking = fileManager.ZCoreFiles()
     if not message:
         message="Reboot Cancelled"
-    processes = LinuxFiles.get_process_tracker()
+    processes = processTracking.get_process_tracker()
     if processes:
         for process in processes:
             name, pid = process.split(",")
             if name == "zcore-update-reboot":
                 os.kill(int(pid), signal.SIGTERM)
-        LinuxFiles.clear_process_tracker
+        processTracking.clear_process_tracker
     else:
         linux_services.sys_calls("stop", "zomboid_reboot.service")
         
     send_message(message)
 
 def dynamic_loot():
+    zomboidConfigFiles = fileManager.ZomboidConfigurationFiles()
     low, high = config.dynamicLootRange
     newLootHours = random.randrange(low, high)
-    iniFile = LinuxFiles.open_ini_file()
+    iniFile = zomboidConfigFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
     if oldValue:
         newContents = iniFile.replace(oldValue.group(0),
             f"HoursForLootRespawn={newLootHours}")
-        LinuxFiles.write_ini_file(newContents)
+        zomboidConfigFiles.write_ini_file(newContents)
 
 def restart_handler(message, delay, triggerBackup, stop):
     if not message:
@@ -84,7 +85,9 @@ def restart_handler(message, delay, triggerBackup, stop):
     time.sleep(30)
 
     linux_services.core_service("stop")
-    LinuxFiles.delete_map_sand() 
+    
+    miscFileFunctions = fileManager.MiscFileFunctions()
+    miscFileFunctions.delete_map_sand()
 
     if triggerBackup:
         thread = backup.backup_handler(True)

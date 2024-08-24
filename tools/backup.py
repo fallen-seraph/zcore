@@ -5,8 +5,7 @@ from datetime import datetime, timedelta
 import pytz
 from threading import Thread
 
-from tools import linux_services
-from tools.linux_files import LinuxFiles
+from tools import fileManager, linux_services
 
 from utils.config import backupRetentionDays, dailyBackupTimeZone
 
@@ -25,7 +24,8 @@ def backup_handler(force):
     if active == "active":
         print("Server is online. Shutdown before backing up.")
     else:
-        backupPath = LinuxFiles.get_daily_backup_path()
+        globalBackupFiles = fileManager.GlobalZomboidBackups()
+        backupPath = globalBackupFiles.dailyBackups
         stagingPath = f"{backupPath}/staging/"
         dateToDay = datetime.now(pytz.timezone(dailyBackupTimeZone))
         today = dateToDay.strftime("%d_%m_%Y-%H:%M")
@@ -34,13 +34,13 @@ def backup_handler(force):
 
         try:
             subprocess.run(["rsync", "-aq", "--exclude", "backups",
-                "--delete", f"{LinuxFiles.get_zomboid_path()}/", stagingPath])
+                "--delete", f"{globalBackupFiles.zomboidPath}/", stagingPath])
             
             thread = Thread(target=compress, args=(backupPath, today, stagingPath))
             thread.start()
         except CalledProcessError as e:
             print(f"An error occured: {e}.")
 
-        LinuxFiles.remove_oldest_backup(nDaysAgo)
+        globalBackupFiles.remove_oldest_backup(nDaysAgo)
 
         return thread

@@ -1,7 +1,7 @@
 import pytz
 import configparser
 from datetime import datetime
-from tools.linux_files import LinuxFiles
+from tools import fileManager
 
 def validate_time(value):
     try:
@@ -26,7 +26,8 @@ def validate_range(value):
 
 
 cparser = configparser.ConfigParser()
-cparser.read(f"{LinuxFiles.get_home()}/zcore/config.ini")
+coreFiles = fileManager.CoreFiles()
+cparser.read(coreFiles._home / "zcore/config.ini")
 
 try:
     backupRetentionDays = cparser.getint('BACKUPS', 'backupRetentionDays')
