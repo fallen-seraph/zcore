@@ -23,13 +23,13 @@ def validate_range(value):
         return (low, high)
     except ValueError:
         raise ValueError(f"Invalid range format: {value}")
-
-
+    
 cparser = configparser.ConfigParser()
 coreFiles = fileManager.CoreFiles()
 cparser.read(coreFiles._home / "zcore/config.ini")
 
 try:
+    activeHoursBeforeRestart = cparser.getint('RESTART', 'activeHoursBeforeRestart')
     backupRetentionDays = cparser.getint('BACKUPS', 'backupRetentionDays')
     dailyBackupTime = validate_time(cparser.get('BACKUPS', 'dailyBackupTime'))
     dailyBackupTimeZone = validate_time_zone(cparser.get('BACKUPS',
