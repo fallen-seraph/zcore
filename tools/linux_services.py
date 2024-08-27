@@ -1,4 +1,6 @@
+import os
 import sys
+import signal
 from subprocess import run, PIPE, CalledProcessError
 
 def sys_calls(command, serviceFile):
@@ -26,3 +28,12 @@ def get_service_info(service_name):
         return result.stdout.strip().split("\n")
     except CalledProcessError as e:
         sys.exit(f"An error occured: {e}.")
+
+def kill_restart_process(processes):
+    for process in processes:
+        name, pid = process.split(",")
+        if name == "zcore-update-reboot":
+            try:
+                os.kill(int(pid), signal.SIGTERM)
+            except Exception as e:
+                print(e)

@@ -1,3 +1,5 @@
+import re
+import random
 import subprocess
 from subprocess import CalledProcessError
 import datetime
@@ -7,15 +9,31 @@ from threading import Thread
 
 from tools import fileManager, linux_services
 
-from utils.config import backupRetentionDays, dailyBackupTimeZone
+from utils.config import backupRetentionDays, dailyBackupTimeZone, dynamicLootEnabled, dynamicLootRange
 
 def compress(backupPath, today, stagingPath):
     
     subprocess.run(["tar", "-czf",
         f"{backupPath}/{today}_backup.tar.gz", "-C",
         stagingPath, "."])
+    
+
+def dynamic_loot():
+    zomboidConfigFiles = fileManager.ZomboidConfigurationFiles()
+    low, high = dynamicLootRange
+    newLootHours = random.randrange(low, high)
+    iniFile = zomboidConfigFiles.open_ini_file()
+    oldValue = re.search("HoursForLootRespawn=.*", iniFile)
+    if oldValue:
+        newContents = iniFile.replace(oldValue.group(0),
+            f"HoursForLootRespawn={newLootHours}")
+        zomboidConfigFiles.write_ini_file(newContents)
 
 def backup_handler(force):
+
+    if dynamicLootEnabled:
+        dynamic_loot()
+
     active = None
 
     if not force:

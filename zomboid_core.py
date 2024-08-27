@@ -1,6 +1,6 @@
 from utils import arguments
 from install import linux_installer
-from tools import backup, ban, chunks, restart, report, linux_services
+from tools import backup, ban, chunks, restart, report, linux_services, utilities, scheduler
 from tools.skimmers import skimmer_main
 
 import time
@@ -15,14 +15,13 @@ def main():
             backup.backup_handler(args.backupForce)
         case "restart":
             if args.scheduled:
-                restart.restart_schedular()
+                scheduler.restart_scheduler()
             elif args.cancel:
-                restart.cancel_pending_restart(args.cancel)
+                utilities.cancel_pending_restart(args.cancel)
             elif args.instant:
-                restart.instant_restart()
+                linux_services.core_service("restart")
             else:
-                restart.restart_handler(args.message, args.delay, args.backup,
-                    args.stop)
+                restart.restart_server_with_messages(args.message, args.delay, args.backup, args.stop)
         case "chunk":
             active = linux_services.get_service_status(
                 "zomboid_core.service")[1]
