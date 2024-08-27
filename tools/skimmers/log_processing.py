@@ -2,17 +2,19 @@ import re
 import time
 from multiprocessing import Process
 
-from tools import fileManager, restart, linux_services, discord
+from tools import fileManager, restart, linux_services, utilities
 
 def debug_line_process(line):
     if re.match("^\[.*\] LOG  : General.*> CheckModsNeedUpdate: Mods need "
         "update\.$", line):
         processName = "zcore-update-reboot"
-        process = Process(target=restart.restart_handler, args=(
-            "a mod update", None, False, False), name=processName)
+        process = Process(target=restart.restart_server_with_messages, args=(
+            "a mod update"), name=processName)
         process.start()
-        processFiles = fileManager.ZCoreFiles()
-        processFiles.create_process_tracker(processName, process.pid)
+        fileManager.ZCoreFiles().create_process_tracker(
+            processName,
+            process.pid
+        )
         return process
     elif re.match("^\[.*\] LOG  : General.*> Failed to connect to Steam "
         "servers.$", line):
@@ -22,7 +24,7 @@ def debug_line_process(line):
 
 def steam_down():
     time.sleep(20)
-    discord.discord_player_notifications("Steam connection failure, "
+    utilities.discord_player_notifications("Steam connection failure, "
         "restarting.")
     active = linux_services.get_service_status("zomboid_core.service")[1]
     if active != "active":
