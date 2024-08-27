@@ -2,8 +2,8 @@ import math
 import time
 
 class DelayCalculator:
-    def __init__(self, minutesUntilRestart=15):
-        self.minutesUntilRestart = minutesUntilRestart
+    def __init__(self, providedDelay):
+        self.minutesUntilRestart = self.default_delay(providedDelay)
         self._intervalCount = math.ceil(self.minutesUntilRestart/5)
         self._totalDelay = self._intervalCount*5
 
@@ -14,6 +14,11 @@ class DelayCalculator:
     @property
     def totalDelay(self):
         return self._totalDelay
+    
+    def default_delay(self, providedDelay):
+        if not providedDelay:
+            self.minutesUntilRestart = 15
+        return self.minutesUntilRestart
 
     def get_interval_time(self):
         return (self._intervalCount*5)/5
