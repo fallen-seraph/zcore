@@ -1,11 +1,13 @@
 import time
-import lgsm
-import backup
-import messages
-import utilities
-import file_manager
-import time_manager
-import linux_services
+from tools import (
+    lgsm,
+    backup,
+    messages,
+    utilities,
+    file_manager,
+    time_manager,
+    linux_services
+)
 
 def restart_server_with_messages(message=None, providedDelay=None, triggerBackup=False, stop=False):
     delayCalc = time_manager.DelayCalculator(providedDelay)

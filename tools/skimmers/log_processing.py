@@ -2,7 +2,12 @@ import re
 import time
 from multiprocessing import Process
 
-from tools import file_manager, restart, linux_services, utilities
+from tools import (
+    file_manager,
+    restart,
+    linux_services,
+    utilities
+)
 
 def debug_line_process(line):
     if re.match("^\[.*\] LOG  : General.*> CheckModsNeedUpdate: Mods need "

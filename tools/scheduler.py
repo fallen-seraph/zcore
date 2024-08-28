@@ -1,11 +1,9 @@
 import pytz
 from datetime import datetime, timedelta
 
-import lgsm
-import restart
-import linux_services
+from tools import lgsm, restart, linux_services
 
-from utils import Configurations
+from utils.config import Configurations
 
 config = Configurations()
 

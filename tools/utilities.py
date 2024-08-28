@@ -1,11 +1,13 @@
 from disnake import SyncWebhook
 
-import lgsm
-import messages
-import file_manager
-import linux_services
+from tools import (
+    lgsm,
+    messages,
+    file_manager,
+    linux_services
+)
 
-from utils import Configurations
+from utils.config import Configurations
 
 config = Configurations()
 
