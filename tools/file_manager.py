@@ -1,9 +1,12 @@
 import os
-import secrets
+import re
 import shutil
+import random
+import secrets
 import collections
 from pathlib import Path
 from functools import cached_property
+from utils.config import Configurations
 
 class CoreFiles:
     def __init__(self):
@@ -136,8 +139,22 @@ class ZomboidConfigurationFiles(CoreFiles):
         return contents
     
     def write_ini_file(self, contents):
-        with open(self._serverini, "w", encoding="IBM865") as openFile:
+        with open(self.serverini, "w", encoding="IBM865") as openFile:
             openFile.write(contents)
+
+    def update_hours_for_loot_respawn(self):
+        config = Configurations()
+        if config.dynamicLootEnabled:
+            low, high = config.dynamicLootRange
+            newLootHours = random.randrange(low, high)
+            iniFile = self.open_ini_file()
+            oldValue = re.search("HoursForLootRespawn=.*", iniFile)
+            if oldValue:
+                newContents = iniFile.replace(
+                    oldValue.group(0),
+                    f"HoursForLootRespawn={newLootHours}"
+                )
+                self.write_ini_file(newContents)
 
 class ZCoreFiles(CoreFiles):
     def create_process_tracker(self, name, pid):
