@@ -116,7 +116,7 @@ class ZomboidChunks(CoreFiles):
         if Path(chunkFilePath).exists():
             return chunkFilePath
 
-    def chunk_list_to_file(self, chunkList, fileName):
+    def chunk_list_to_file(self, chunkList, fileName=None):
         chunkFilePath = self.chunkListPath / fileName
         with open(chunkFilePath, "w") as openFile:
             for chunkFileName in chunkList:
