@@ -1,26 +1,26 @@
 import re
+import pytz
 import random
 import subprocess
 from subprocess import CalledProcessError
 import datetime
 from datetime import datetime, timedelta
-import pytz
 from threading import Thread
 
-from tools import fileManager, linux_services
+from file_manager import ZomboidConfigurationFiles, GlobalZomboidBackups
+from linux_services import get_service_status
+from utils import Configurations
 
-from utils.config import backupRetentionDays, dailyBackupTimeZone, dynamicLootEnabled, dynamicLootRange
+config = Configurations()
 
 def compress(backupPath, today, stagingPath):
-    
     subprocess.run(["tar", "-czf",
         f"{backupPath}/{today}_backup.tar.gz", "-C",
         stagingPath, "."])
-    
 
 def dynamic_loot():
-    zomboidConfigFiles = fileManager.ZomboidConfigurationFiles()
-    low, high = dynamicLootRange
+    zomboidConfigFiles = ZomboidConfigurationFiles()
+    low, high = config.dynamicLootRange
     newLootHours = random.randrange(low, high)
     iniFile = zomboidConfigFiles.open_ini_file()
     oldValue = re.search("HoursForLootRespawn=.*", iniFile)
@@ -31,23 +31,23 @@ def dynamic_loot():
 
 def backup_handler(force):
 
-    if dynamicLootEnabled:
+    if config.dynamicLootEnabled:
         dynamic_loot()
 
     active = None
 
     if not force:
-        active = linux_services.get_service_status("zomboid_core.service")[1]
+        active = get_service_status("zomboid_core.service")[1]
     
     if active == "active":
         print("Server is online. Shutdown before backing up.")
     else:
-        globalBackupFiles = fileManager.GlobalZomboidBackups()
+        globalBackupFiles = GlobalZomboidBackups()
         backupPath = globalBackupFiles.dailyBackups
         stagingPath = f"{backupPath}/staging/"
-        dateToDay = datetime.now(pytz.timezone(dailyBackupTimeZone))
+        dateToDay = datetime.now(pytz.timezone(config.dailyBackupTimeZone))
         today = dateToDay.strftime("%d_%m_%Y-%H:%M")
-        nDaysAgo = (dateToDay - timedelta(days=backupRetentionDays)).strftime(
+        nDaysAgo = (dateToDay - timedelta(days=config.backupRetentionDays)).strftime(
             "%d_%m_%Y")
 
         try:

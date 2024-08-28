@@ -1,5 +1,5 @@
 import time
-from tools import lgsm
+from lgsm import ban_id
 
 def console_ban_handler(file):
     with file as openFile:
@@ -7,6 +7,6 @@ def console_ban_handler(file):
 
     for x in banList:
         x = x.strip()
-        lgsm.ban_id(x)
+        ban_id(x)
         print(f"Banning id: {x}")
         time.sleep(2)

@@ -1,9 +1,14 @@
 import time
-
-from tools import fileManager, linux_services, lgsm, backup, delay, messages, utilities
+import lgsm
+import backup
+import messages
+import utilities
+import file_manager
+import time_manager
+import linux_services
 
 def restart_server_with_messages(message=None, providedDelay=None, triggerBackup=False, stop=False):
-    delayCalc = delay.DelayCalculator(providedDelay)
+    delayCalc = time_manager.DelayCalculator(providedDelay)
     messageBuilder = messages.MessageHandler(message)
 
     linux_services.sys_calls("stop", "zomboid_reboot.timer")
@@ -32,7 +37,7 @@ def restart_server_with_messages(message=None, providedDelay=None, triggerBackup
 
     linux_services.core_service("stop")
     
-    fileManager.MiscFileFunctions().delete_map_sand()
+    file_manager.MiscFileFunctions().delete_map_sand()
 
     thread = None
 

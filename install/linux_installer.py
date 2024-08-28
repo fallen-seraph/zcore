@@ -1,14 +1,14 @@
 import requests
 import subprocess
 from subprocess import CalledProcessError
-from tools import fileManager
+from tools import file_manager
 
 class Installer():
     def __init__(self):
-        self.linuxFiles = fileManager.LinuxFileSystem()
+        self.linuxFiles = file_manager.LinuxFileSystem()
 
     def deploy_lgsm(self):
-        lgsmFiles = fileManager.LGSMFiles()
+        lgsmFiles = file_manager.LGSMFiles()
         lgsmFiles.create_pzlgsm_directory()
         pzlFolder, file = lgsmFiles.create_lgsm_file()
         try:
@@ -47,9 +47,9 @@ class Installer():
             print(f"An error occured: {e}")
 
     def misc_tasks(self):
-        zBackups = fileManager.GlobalZomboidBackups()
+        zBackups = file_manager.GlobalZomboidBackups()
         zBackups.create_backup_directories()
-        zomboidChunks = fileManager.ZomboidChunks()
+        zomboidChunks = file_manager.ZomboidChunks()
         zomboidChunks.prep_chunk_directory()
         
         self.linuxFiles.alias_creation()
