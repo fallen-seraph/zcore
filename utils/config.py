@@ -10,35 +10,35 @@ class Configurations:
 
         try:
             self.activeHoursBeforeRestart = self.cparser.getint(
-                'RESTART',
-                'activeHoursBeforeRestart'
+                "RESTART",
+                "activeHoursBeforeRestart"
             )
             self.backupRetentionDays = self.cparser.getint(
-                'BACKUPS',
-                'backupRetentionDays'
+                "BACKUPS",
+                "backupRetentionDays"
             )
             self.dailyBackupTime = self.validate_time(
                 self.cparser.get(
-                    'BACKUPS',
-                    'dailyBackupTime'
+                    "BACKUPS",
+                    "dailyBackupTime"
                 )
             )
             self.dailyBackupTimeZone = self.validate_time_zone(
                 self.cparser.get(
-                    'BACKUPS',
+                    "BACKUPS",
                     self.dailyBackupTimeZone
                 )
             )
-            self.dynamicLootEnabled = self.cparser.getboolean('DYNAMIC.LOOT', 'dynamicLootEnabled')
-            self.dynamicLootRange = self.validate_range(self.cparser.get('DYNAMIC.LOOT', 'dynamicLootRange'))
-            self.playerNotificationURL = self.cparser.get('DISCORD', 'playerNotificationURL')
-            self.adminNotificationURL = self.cparser.get('DISCORD', 'adminNotificationURL')
+            self.dynamicLootEnabled = self.cparser.getboolean("DYNAMIC.LOOT", "dynamicLootEnabled")
+            self.dynamicLootRange = self.validate_range(self.cparser.get("DYNAMIC.LOOT", "dynamicLootRange"))
+            self.playerNotificationURL = self.cparser.get("DISCORD", "playerNotificationURL")
+            self.adminNotificationURL = self.cparser.get("DISCORD", "adminNotificationURL")
         except (configparser.Error, ValueError) as e:
             print(f"Configuration error: {e}")
 
     def validate_time(self, value):
         try:
-            datetime.strptime(value, '%H:%M')
+            datetime.strptime(value, "%H:%M")
             return value
         except ValueError:
             raise ValueError(f"Invalid time format: {value}")
@@ -50,7 +50,7 @@ class Configurations:
 
     def validate_range(self, value):
         try:
-            low, high = map(int, value.split('-'))
+            low, high = map(int, value.split("-"))
             if low > high:
                 raise ValueError
             return (low, high)

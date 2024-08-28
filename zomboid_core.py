@@ -23,12 +23,10 @@ def main():
         case "install":
             install_mode(args.target)
         case "backup": 
-            if active == "active":
-                print("Server is online. Shutdown before backing up or force backup")
-                if args.backupForce:
-                    backup.backup_handler()
-            else:
+            if active != "active" or args.backupForce:
                 backup.backup_handler()
+            else:
+                print("Server is online. Shutdown before backing up or force backup")
         case "restart":
             if args.scheduled:
                 scheduler.restart_scheduler()
@@ -44,7 +42,6 @@ def main():
                     args.stop
                 )
         case "chunk":
-            
             if active != "active" or args.force:                
                 if not args.range:
                     chunks.delete_chunks_from_file(args.file)

@@ -22,18 +22,10 @@ def generate_chunk_list_from_range(chunkOne, chunkTwo):
 
     return rangeList
 
-def get_chunks_from(fileObject):
-    rangeList = []
-
-    with fileObject as openFile:
-        fileContents = openFile.read()
-    rangeList = list(filter(None, fileContents.split("\n")))
-
-    return rangeList
-
 def delete_chunks_from_file(fileObject):
-    rangeList = get_chunks_from(fileObject)
-    ZomboidChunks().delete_chunks(rangeList)
+    chunkFiles = ZomboidChunks()
+    rangeList = chunkFiles.get_chunks_from(fileObject)
+    chunkFiles.delete_chunks(rangeList)
 
 def create_chunk_list_file(chunkOne, chunkTwo, fileName):
     rangeList = generate_chunk_list_from_range(chunkOne, chunkTwo)

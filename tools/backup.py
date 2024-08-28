@@ -7,22 +7,22 @@ from tools import (
 def backup_handler():
     globalBackupFiles = GlobalZomboidBackups()
     backupPath = globalBackupFiles.dailyBackups
+    stagingPath = backupPath / "staging/"
     ZomboidConfigurationFiles().update_hours_for_loot_respawn()
 
     today = scheduler.truncate_date_as_string()
-    nDaysAgo = scheduler.get_date_of_backup_period_start
 
     linux_commands.start_backup(
         backupPath,
+        stagingPath,
         globalBackupFiles.zomboidPath,
-        today
     )
 
     thread = linux_commands.start_compress_thread(
-        backupPath,
+        stagingPath,
         today
     )
-
-    globalBackupFiles.remove_oldest_backup(nDaysAgo)
+    
+    globalBackupFiles.remove_oldest_backup()
 
     return thread
