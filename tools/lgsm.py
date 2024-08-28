@@ -1,7 +1,7 @@
 import sys
 import subprocess
 from subprocess import CalledProcessError
-import file_manager
+from tools import file_manager
 
 def add_user(name, password):
     if name and password:

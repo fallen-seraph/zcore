@@ -1,5 +1,5 @@
 import time
-from lgsm import ban_id
+from tools.lgsm import ban_id
 
 def console_ban_handler(file):
     with file as openFile:

@@ -1,7 +1,6 @@
 from subprocess import run, PIPE, CalledProcessError
 
-import file_manager
-import utilities
+from tools import file_manager, utilities
 
 def crash_report():
     #Crash report generator

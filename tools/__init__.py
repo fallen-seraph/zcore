@@ -1,9 +1,9 @@
 from .backup import backup_handler
 from .ban import console_ban_handler
 from .chunks import (
-    range_generator,
-    chunks_by_range,
-    chunks_by_file
+    delete_chunks_from_file,
+    create_chunk_list_file,
+    delete_chunks_from_given_range
 )
 from .file_manager import (
     CoreFiles,

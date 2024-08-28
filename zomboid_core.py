@@ -1,10 +1,18 @@
+import time
 from utils import arguments
 from install import linux_installer
-import tools
-from tools import backup, ban, chunks, report, linux_services, utilities, scheduler
-from tools.skimmers import skimmer_main
+from tools import (
+    ban,
+    backup,
+    chunks,
+    report,
+    restart,
+    scheduler,
+    utilities,
+    linux_services
+)
 
-import time
+from tools.skimmers import skimmer_main
 
 def main():
     args = arguments.CMD_line_args()
@@ -22,17 +30,30 @@ def main():
             elif args.instant:
                 linux_services.core_service("restart")
             else:
-                tools.restart_server_with_messages(args.message, args.delay, args.backup, args.stop)
+                restart.restart_server_with_messages(
+                    args.message,
+                    args.delay,
+                    args.backup,
+                    args.stop
+                )
         case "chunk":
             active = linux_services.get_service_status(
                 "zomboid_core.service")[1]
             
-            if active != "active" or args.force:
+            if active != "active" or args.force:                
                 if not args.range:
-                    chunks.chunks_by_file(args.file)
+                    chunks.delete_chunks_from_file(args.file)
+                elif args.file_name:
+                    chunks.create_chunk_list_file(
+                        args.chunk_one,
+                        args.chunk_two,
+                        args.file_name
+                    )
                 else:
-                    chunks.chunks_by_range(args.chunk_one, args.chunk_two,
-                        args.file_name)
+                    chunks.delete_chunks_from_given_range(
+                        args.chunk_one,
+                        args.chunk_two
+                    )
             else:
                 print("Warning: Deleting Files - Shutdown server or force "
                     "with --force.")

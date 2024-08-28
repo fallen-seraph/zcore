@@ -7,9 +7,9 @@ import datetime
 from datetime import datetime, timedelta
 from threading import Thread
 
-from file_manager import ZomboidConfigurationFiles, GlobalZomboidBackups
-from linux_services import get_service_status
-from utils import Configurations
+from tools.file_manager import ZomboidConfigurationFiles, GlobalZomboidBackups
+from tools.linux_services import get_service_status
+from utils.config import Configurations
 
 config = Configurations()
 
