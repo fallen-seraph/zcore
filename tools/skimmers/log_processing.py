@@ -2,7 +2,7 @@ import re
 import time
 from multiprocessing import Process
 
-from tools import fileManager, restart, linux_services, utilities
+from tools import file_manager, restart, linux_services, utilities
 
 def debug_line_process(line):
     if re.match("^\[.*\] LOG  : General.*> CheckModsNeedUpdate: Mods need "
@@ -11,7 +11,7 @@ def debug_line_process(line):
         process = Process(target=restart.restart_server_with_messages, args=(
             "a mod update"), name=processName)
         process.start()
-        fileManager.ZCoreFiles().create_process_tracker(
+        file_manager.ZCoreFiles().create_process_tracker(
             processName,
             process.pid
         )

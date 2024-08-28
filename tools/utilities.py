@@ -1,14 +1,20 @@
 from disnake import SyncWebhook
-from tools import fileManager, linux_services, messages, lgsm
 
-from utils import config
+import lgsm
+import messages
+import file_manager
+import linux_services
+
+from utils import Configurations
+
+config = Configurations()
 
 def send_message(finalMessage):
     lgsm.send_server_message(finalMessage)
     discord_player_notifications(finalMessage)
 
-def cancel_pending_restart( message):
-    processTracking = fileManager.ZCoreFiles()
+def cancel_pending_restart(message):
+    processTracking = file_manager.ZCoreFiles()
     processes = processTracking.get_process_tracker()
 
     if processes:

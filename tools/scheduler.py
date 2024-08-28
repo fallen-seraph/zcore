@@ -1,9 +1,13 @@
 import pytz
 from datetime import datetime, timedelta
 
-from tools import linux_services, lgsm, restart
+import lgsm
+import restart
+import linux_services
 
-from utils import config
+from utils import Configurations
+
+config = Configurations()
 
     
 def get_backup_time():
@@ -22,16 +26,6 @@ def get_backup_time():
         .strftime("%H:%M")
     )
 
-def get_restart_interval(serverActiveTime):
-    serverActiveTimeasUTC = (
-        datetime.strptime(serverActiveTime, "%a %Y-%m-%d %H:%M:%S %Z")
-        .astimezone(pytz.utc)
-    )
-    return (
-        serverActiveTimeasUTC
-        + timedelta(hours=config.activeHoursBeforeRestart)
-    )
-
 def trigger_restart_type(activeHours):
         currentTime = datetime.now(pytz.utc)
 
@@ -44,6 +38,16 @@ def trigger_restart_type(activeHours):
             restart.restart_server_with_messages()
         elif currentTime.minute % 10 == 0:
             lgsm.lgsm_passthrough("checkModsNeedUpdate")
+            
+def get_restart_interval(serverActiveTime):
+    serverActiveTimeasUTC = (
+        datetime.strptime(serverActiveTime, "%a %Y-%m-%d %H:%M:%S %Z")
+        .astimezone(pytz.utc)
+    )
+    return (
+        serverActiveTimeasUTC
+        + timedelta(hours=config.activeHoursBeforeRestart)
+    )
 
 def restart_scheduler():
     isServerActive, serverActiveTime = linux_services.get_service_info(

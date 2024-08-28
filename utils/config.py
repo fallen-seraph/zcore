@@ -1,47 +1,58 @@
 import pytz
 import configparser
 from datetime import datetime
-from tools import fileManager
+from tools import file_manager
 
-def validate_time(value):
-    try:
-        datetime.strptime(value, '%H:%M')
+class Configurations:
+    def __init__(self):
+        self.cparser = configparser.ConfigParser()
+        self.cparser.read(file_manager.CoreFiles()._home / "zcore/config.ini")
+
+        try:
+            self.activeHoursBeforeRestart = self.cparser.getint(
+                'RESTART',
+                'activeHoursBeforeRestart'
+            )
+            self.backupRetentionDays = self.cparser.getint(
+                'BACKUPS',
+                'backupRetentionDays'
+            )
+            self.dailyBackupTime = self.validate_time(
+                self.cparser.get(
+                    'BACKUPS',
+                    'dailyBackupTime'
+                )
+            )
+            self.dailyBackupTimeZone = self.validate_time_zone(
+                self.cparser.get(
+                    'BACKUPS',
+                    self.dailyBackupTimeZone
+                )
+            )
+            self.dynamicLootEnabled = self.cparser.getboolean('DYNAMIC.LOOT', 'dynamicLootEnabled')
+            self.dynamicLootRange = self.validate_range(self.cparser.get('DYNAMIC.LOOT', 'dynamicLootRange'))
+            self.playerNotificationURL = self.cparser.get('DISCORD', 'playerNotificationURL')
+            self.adminNotificationURL = self.cparser.get('DISCORD', 'adminNotificationURL')
+        except (configparser.Error, ValueError) as e:
+            print(f"Configuration error: {e}")
+
+    def validate_time(self, value):
+        try:
+            datetime.strptime(value, '%H:%M')
+            return value
+        except ValueError:
+            raise ValueError(f"Invalid time format: {value}")
+
+    def validate_time_zone(self, value):
+        if value not in pytz.all_timezones:
+            raise ValueError(f"Invalid time zone: {value}")
         return value
-    except ValueError:
-        raise ValueError(f"Invalid time format: {value}")
 
-def validate_time_zone(value):
-    if value not in pytz.all_timezones:
-        raise ValueError(f"Invalid time zone: {value}")
-    return value
-
-def validate_range(value):
-    try:
-        low, high = map(int, value.split('-'))
-        if low > high:
-            raise ValueError
-        return (low, high)
-    except ValueError:
-        raise ValueError(f"Invalid range format: {value}")
-    
-cparser = configparser.ConfigParser()
-coreFiles = fileManager.CoreFiles()
-cparser.read(coreFiles._home / "zcore/config.ini")
-
-try:
-    activeHoursBeforeRestart = cparser.getint('RESTART', 'activeHoursBeforeRestart')
-    backupRetentionDays = cparser.getint('BACKUPS', 'backupRetentionDays')
-    dailyBackupTime = validate_time(cparser.get('BACKUPS', 'dailyBackupTime'))
-    dailyBackupTimeZone = validate_time_zone(cparser.get('BACKUPS',
-        'dailyBackupTimeZone'))
-
-    dynamicLootEnabled = cparser.getboolean('DYNAMIC.LOOT',
-        'dynamicLootEnabled')
-    dynamicLootRange = validate_range(cparser.get('DYNAMIC.LOOT',
-        'dynamicLootRange'))
-
-    playerNotificationURL = cparser.get('DISCORD', 'playerNotificationURL')
-    adminNotificationURL = cparser.get('DISCORD', 'adminNotificationURL')
-
-except (configparser.Error, ValueError) as e:
-    print(f"Configuration error: {e}")
+    def validate_range(self, value):
+        try:
+            low, high = map(int, value.split('-'))
+            if low > high:
+                raise ValueError
+            return (low, high)
+        except ValueError:
+            raise ValueError(f"Invalid range format: {value}")
