@@ -16,12 +16,19 @@ from tools.skimmers import skimmer_main
 
 def main():
     args = arguments.CMD_line_args()
+    active = linux_services.get_service_status(
+        "zomboid_core.service")[1]
 
     match args.command:
         case "install":
             install_mode(args.target)
         case "backup": 
-            backup.backup_handler(args.backupForce)
+            if active == "active":
+                print("Server is online. Shutdown before backing up or force backup")
+                if args.backupForce:
+                    backup.backup_handler()
+            else:
+                backup.backup_handler()
         case "restart":
             if args.scheduled:
                 scheduler.restart_scheduler()
@@ -37,8 +44,6 @@ def main():
                     args.stop
                 )
         case "chunk":
-            active = linux_services.get_service_status(
-                "zomboid_core.service")[1]
             
             if active != "active" or args.force:                
                 if not args.range:
