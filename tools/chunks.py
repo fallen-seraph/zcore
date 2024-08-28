@@ -1,32 +1,44 @@
-import file_manager
+from tools.file_manager import ZomboidChunks
 
-def range_generator(locationX1, locationY1, locationX2, locationY2):
-    mapFileList = []
+def build_coordinate_list(coordX1, coordY1, coordX2, coordY2):
+    coordinateList = []
 
-    for x in range(locationX1, locationX2+1):
-        for y in range(locationY1, locationY2+1):
-            mapFileList.append(f"{x}_{y}")
+    for x in range(coordX1, coordX2+1):
+        for y in range(coordY1, coordY2+1):
+            coordinateList.append(f"{x}_{y}")
 
-    return mapFileList
+    return coordinateList
 
-def chunks_by_range(chunkOne, chunkTwo, file_name):
-    chunkFiles = file_manager.ZomboidChunks()
+def generate_chunk_list_from_range(chunkOne, chunkTwo):
     locationX1, locationY1 = map(int, chunkOne.split("_"))
     locationX2, locationY2 = map(int, chunkTwo.split("_"))
 
-    range = range_generator(locationX1, locationY1, locationX2, locationY2)
+    rangeList = build_coordinate_list(
+        locationX1,
+        locationY1,
+        locationX2,
+        locationY2
+    )
 
-    if file_name:
-        chunkFiles.chunk_list_to_file(range, file_name)
-    else:
-        chunkFiles.delete_chunks(range)
+    return rangeList
 
-def chunks_by_file(file):
-    chunkFiles = file_manager.ZomboidChunks()
+def get_chunks_from(fileObject):
     rangeList = []
 
-    with file as openFile:
+    with fileObject as openFile:
         fileContents = openFile.read()
     rangeList = list(filter(None, fileContents.split("\n")))
 
-    chunkFiles.delete_chunks(rangeList)
+    return rangeList
+
+def delete_chunks_from_file(fileObject):
+    rangeList = get_chunks_from(fileObject)
+    ZomboidChunks().delete_chunks(rangeList)
+
+def create_chunk_list_file(chunkOne, chunkTwo, fileName):
+    rangeList = generate_chunk_list_from_range(chunkOne, chunkTwo)
+    ZomboidChunks().chunk_list_to_file(rangeList, fileName)
+
+def delete_chunks_from_given_range(chunkOne, chunkTwo):
+    rangeList = generate_chunk_list_from_range(chunkOne, chunkTwo)
+    ZomboidChunks().delete_chunks(rangeList)
