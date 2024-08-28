@@ -5,8 +5,8 @@ def console_ban_handler(file):
     with file as openFile:
         banList = openFile.readlines()
 
-    for x in banList:
-        x = x.strip()
-        ban_id(x)
-        print(f"Banning id: {x}")
+    for steamID in banList:
+        steamID = steamID.strip()
+        ban_id(steamID)
+        print(f"Banning id: {steamID}")
         time.sleep(2)
