@@ -57,16 +57,12 @@ class LinuxFileSystem(CoreFiles):
         self.systemctlPath.mkdir(parents=True, exist_ok=True)
     
     def copy_packaged_sysd_files(self):
-        self.create_user_sysd_folder()
-
-        sysdFilePath = self._home / "zcore/install/service-files"
+        packagedSysFilePath = self._home / "zcore/install/service-files"
         
-        packagedSYSDFiles = self.get_files_from_directory(sysdFilePath)
+        packagedSYSDFiles = self.get_files_from_directory(packagedSysFilePath)
 
         for fileName in packagedSYSDFiles:
-            shutil.copy2(f"{sysdFilePath}/{fileName}", self.systemctlPath)
-
-        return packagedSYSDFiles
+            shutil.copy2(f"{packagedSysFilePath}/{fileName}", self.systemctlPath)
     
     def get_sysd_files(self):
         return self.get_files_from_directory(self.systemctlPath)
