@@ -12,14 +12,18 @@ class DebugLogHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.is_directory:
             return
-        self.handle_file(event.src_path)
+        self.log_handler(event.src_path)
 
     def on_created(self, event):
         if event.is_directory:
             return
-        self.handle_file(event.src_path)
+        self.log_handler(event.src_path)
 
-    def handle_file(self, filepath):
+    def log_handler(self, filepath):
+        self.get_latest_updated_file(filepath)
+        self.read_lines_from_latest_log()
+
+    def get_latest_updated_file(self, filepath):
         if not filepath.endswith(self.fileEndsWith):
             return
         if self.currentFile is None or self.currentFile != filepath:
@@ -29,6 +33,7 @@ class DebugLogHandler(FileSystemEventHandler):
             self.fileHandle = open(filepath, 'r')
             self.fileHandle.seek(0, 2)
 
+    def read_lines_from_latest_log(self):
         while True:
             line = self.fileHandle.readline() # type: ignore
             if not line:
