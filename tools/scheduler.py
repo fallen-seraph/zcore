@@ -6,10 +6,9 @@ from tools import lgsm, restart, linux_services
 from utils.config import Configurations
 
 config = Configurations()
+configuredTimeZone = config.dailyBackupTimeZone
 
-    
 def get_backup_time():
-    configuredTimeZone = config.dailyBackupTimeZone
     backupHour, backupMinute = config.dailyBackupTime.split(":")
     backupTimeZone = (
         pytz.timezone(configuredTimeZone)
@@ -23,6 +22,17 @@ def get_backup_time():
         .astimezone(pytz.utc)
         .strftime("%H:%M")
     )
+
+def get_date_from_configred_tz():
+    return datetime.now(pytz.timezone(configuredTimeZone))
+
+def truncate_date_as_string():
+    return get_date_from_configred_tz().strftime("%d_%m_%Y-%H:%M")
+
+def get_date_of_backup_period_start():
+    dateObjectAsTZ = get_date_from_configred_tz()
+    return (dateObjectAsTZ - timedelta(days=configuredTimeZone)).strftime(
+        "%d_%m_%Y")
 
 def trigger_restart_type(activeHours):
         currentTime = datetime.now(pytz.utc)

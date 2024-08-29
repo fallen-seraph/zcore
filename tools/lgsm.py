@@ -45,4 +45,5 @@ def lgsm_passthrough(command):
             "send", command], check=True, text=True, capture_output=True)
         return result
     except CalledProcessError as e:
+        print(f"An error occured: {e}.")
         sys.exit(f"{e}.")

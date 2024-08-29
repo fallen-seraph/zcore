@@ -1,9 +1,13 @@
 import os
-import secrets
+import re
 import shutil
+import random
+import secrets
 import collections
 from pathlib import Path
 from functools import cached_property
+from tools import scheduler
+from utils.config import Configurations
 
 class CoreFiles:
     def __init__(self):
@@ -45,6 +49,9 @@ class CoreFiles:
     def processTracker(self):
         return self.zcore / "tools/skimmers/.process_tracker"
     
+    def get_files_from_directory(self, filePath):
+        return [x.name for x in os.scandir(filePath) if x.is_file()]
+    
 class LinuxFileSystem(CoreFiles):    
     def create_user_sysd_folder(self):
         self.systemctlPath.mkdir(parents=True, exist_ok=True)
@@ -54,7 +61,7 @@ class LinuxFileSystem(CoreFiles):
 
         sysdFilePath = self._home / "zcore/install/service-files"
         
-        packagedSYSDFiles = [x.name for x in os.scandir(sysdFilePath) if x.is_file()]
+        packagedSYSDFiles = self.get_files_from_directory(sysdFilePath)
 
         for fileName in packagedSYSDFiles:
             shutil.copy2(f"{sysdFilePath}/{fileName}", self.systemctlPath)
@@ -62,7 +69,7 @@ class LinuxFileSystem(CoreFiles):
         return packagedSYSDFiles
     
     def get_sysd_files(self):
-        return [x.name for x in os.scandir(self.systemctlPath) if x.is_file()]
+        return self.get_files_from_directory(self.systemctlPath)
     
     def alias_creation(self):
         aliasFile = self._home / ".bash_aliases"
@@ -78,11 +85,12 @@ class GlobalZomboidBackups(CoreFiles):
         (self.dailyBackups / "staging").mkdir(parents=True, exist_ok=True)
     
     def get_daily_backups(self):
-        return [x.name for x in os.scandir(self.dailyBackups) if x.is_file()]
+        return self.get_files_from_directory(self.dailyBackups)
     
-    def remove_oldest_backup(self, date):
+    def remove_oldest_backup(self):
+        dateOfBackupsToDelete = scheduler.get_date_of_backup_period_start()
         for backup in self.get_daily_backups():
-            if date in backup:
+            if dateOfBackupsToDelete in backup:
                 (self.dailyBackups / backup).unlink()
     
 class LGSMFiles(CoreFiles):
@@ -111,12 +119,17 @@ class ZomboidChunks(CoreFiles):
     def create_chunk_directory(self):
         self.chunkListPath.mkdir(parents=True, exist_ok=True)
 
-    def get_chunk_file_name(self, fileName):
-        chunkFilePath = self.chunkListPath / fileName
-        if Path(chunkFilePath).exists():
-            return chunkFilePath
+    def get_chunks_from(fileObject):
+        rangeList = []
 
-    def chunk_list_to_file(self, chunkList, fileName=None):
+        with fileObject as openFile:
+            fileContents = openFile.read()
+            
+        rangeList = list(filter(None, fileContents.split("\n")))
+
+        return rangeList
+        
+    def chunk_list_to_file(self, chunkList, fileName):
         chunkFilePath = self.chunkListPath / fileName
         with open(chunkFilePath, "w") as openFile:
             for chunkFileName in chunkList:
@@ -136,8 +149,22 @@ class ZomboidConfigurationFiles(CoreFiles):
         return contents
     
     def write_ini_file(self, contents):
-        with open(self._serverini, "w", encoding="IBM865") as openFile:
+        with open(self.serverini, "w", encoding="IBM865") as openFile:
             openFile.write(contents)
+
+    def update_hours_for_loot_respawn(self):
+        config = Configurations()
+        if config.dynamicLootEnabled:
+            low, high = config.dynamicLootRange
+            newLootHours = random.randrange(low, high)
+            iniFile = self.open_ini_file()
+            oldValue = re.search("HoursForLootRespawn=.*", iniFile)
+            if oldValue:
+                newContents = iniFile.replace(
+                    oldValue.group(0),
+                    f"HoursForLootRespawn={newLootHours}"
+                )
+                self.write_ini_file(newContents)
 
 class ZCoreFiles(CoreFiles):
     def create_process_tracker(self, name, pid):

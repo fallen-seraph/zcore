@@ -1,6 +1,6 @@
-from .debug_skimmer import DebugLogHandler
-from .log_processing import (
+from skimmers.debug_skimmer import DebugLogHandler
+from skimmers.log_processing import (
     debug_line_process,
     steam_down
 )
-from .skimmer_main import monitor_logs
+from skimmers.skimmer_main import monitor_logs
