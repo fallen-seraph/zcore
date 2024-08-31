@@ -19,10 +19,13 @@ def backup_handler():
     )
 
     thread = linux_commands.start_compress_thread(
+        backupPath,
+        today,
         stagingPath,
-        today
     )
     
-    globalBackupFiles.remove_oldest_backup()
+    globalBackupFiles.remove_oldest_backup(
+        scheduler.get_date_of_backup_period_start()
+    )
 
     return thread
