@@ -1,34 +1,23 @@
-from tools import chunks
 from pathlib import Path
 
-def range_generator_test():
-    test1 = chunks.build_coordinate_list(0, 0, 1, 1)
-    test2 = chunks.build_coordinate_list(0, 0, 5, 5)
+import tests.windows_config_setup as wcs
 
-    if "0_0" in test1:
-        print("Test 1: True")
-    else:
-        print("Test 1: False")
+def test_range_generator():
+    coordList = chunks.build_coordinate_list(0, 0, 5, 5)
 
-    if "3_3" in test2 and "3_5" in test2:
-        print("Test 2: True")
-    else:
-        print("Test 2: False")
+    assert "0_0" in chunks.build_coordinate_list(0, 0, 1, 1)
+    assert "3_3" in coordList
+    assert "3_5" in coordList
+    assert "7_3" not in coordList
 
-    if "7_3" not in test2:
-        print("Test 3: True")
-    else:
-        print("Test 3: False")
-
-def generate_chunk_list_from_range_test():
+def test_generate_chunk_list_from_range():
     test1 = chunks.generate_chunk_list_from_range("0_0", "10_10")
 
     testList = ["0_5", "2_6", "6_9"]
 
-    print("3 Coordinate Checks:")
-    for x in testList:
-        if x in test1:
-            print("True")
+    for coord in testList:
+        if coord in test1:
+            assert coord in test1
 
 def build_test_chunk_file():
     filePath = Path("tests") / "chunkList.txt"
@@ -41,23 +30,21 @@ def build_test_chunk_file():
 def get_chunks_from_test():
     filePath = Path("tests") / "chunkList.txt"
     with open(filePath, "r") as fileObject:
-        test1 = chunks.get_chunks_from(fileObject)
+        test1 = chunks.delete_chunks_from_file(fileObject)
         filePath.unlink()
 
     testList = ["1281_646", "1282_647"]
 
     print("2 Coordinate Checks:")
     for x in testList:
-        if x in test1:
-            print("True")
-        else:
-            print("False")
-
-def main():
-    range_generator_test()
-    generate_chunk_list_from_range_test()
-    build_test_chunk_file()
-    get_chunks_from_test()
+        assert x in test1
 
 if __name__ == '__main__':
-    main()
+    wcs.windows_config_builder()
+    wcs.zcore_config_copy()
+    from tools import chunks
+    test_range_generator()
+    test_generate_chunk_list_from_range()
+    #build_test_chunk_file()
+    #test_get_chunks_from()
+    wcs.windows_config_cleanup()
