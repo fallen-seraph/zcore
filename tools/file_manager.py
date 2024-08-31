@@ -6,7 +6,7 @@ import secrets
 import collections
 from pathlib import Path
 from functools import cached_property
-from tools import scheduler
+
 from utils.config import Configurations
 
 class CoreFiles:
@@ -83,8 +83,7 @@ class GlobalZomboidBackups(CoreFiles):
     def get_daily_backups(self):
         return self.get_files_from_directory(self.dailyBackups)
     
-    def remove_oldest_backup(self):
-        dateOfBackupsToDelete = scheduler.get_date_of_backup_period_start()
+    def remove_oldest_backup(self, dateOfBackupsToDelete):
         for backup in self.get_daily_backups():
             if dateOfBackupsToDelete in backup:
                 (self.dailyBackups / backup).unlink()
@@ -110,6 +109,7 @@ class LGSMFiles(CoreFiles):
                 
 class ZomboidChunks(CoreFiles):
     def __init__(self):
+        super().__init__()
         self.chunkListPath = self.zomboidPath / "Lua/chunk_lists"
 
     def create_chunk_directory(self):
