@@ -83,4 +83,4 @@ def CMD_line_args():
     parser_ban.add_argument("-f", "--file", required=True, 
         type=argparse.FileType('r'), help="File with a list of bans.")
     
-    return parser.parse_args()
+    return parser

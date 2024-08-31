@@ -26,7 +26,7 @@ class Configurations:
             self.dailyBackupTimeZone = self.validate_time_zone(
                 self.cparser.get(
                     "BACKUPS",
-                    self.dailyBackupTimeZone
+                    "dailyBackupTimeZone"
                 )
             )
             self.dynamicLootEnabled = self.cparser.getboolean("DYNAMIC.LOOT", "dynamicLootEnabled")

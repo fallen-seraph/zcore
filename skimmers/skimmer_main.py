@@ -10,7 +10,7 @@ from tools import (
     utilities
 )
 
-from tools.skimmers import debug_skimmer
+from .debug_skimmer import DebugLogHandler
 from tools.file_manager import ZCoreFiles
 
 def read_from_latest_debug_log(logLine):
@@ -53,7 +53,7 @@ def restart_if_steam_is_down():
 def monitor_logs():
     zcoreFiles = ZCoreFiles()
 
-    event_handler = debug_skimmer.DebugLogHandler(
+    event_handler = DebugLogHandler(
         zcoreFiles.zomboidLogs,
         read_from_latest_debug_log(),
         "_DebugLog-server.txt"
