@@ -12,27 +12,31 @@ from tools import (
     linux_services
 )
 
-from tools.skimmers import skimmer_main
+from skimmers import skimmer_main
 
+parser = arguments.CMD_line_args()
+args = parser.parse_args()
 
-args = arguments.CMD_line_args()
 active = linux_services.get_service_status(
     "zomboid_core.service")[1]
 
 def main():
-    match args.command:
-        case "install":
-            install_mode(args.target)
-        case "backup": 
-            parse_backup_arguments()
-        case "restart":
-            parse_restart_arguments()
-        case "chunk":
-            parse_chunk_arguments()
-        case "ban":
-            ban.console_ban_handler(args.file)
-        case _:
-            parse_misc_or_no_arguments()
+    try:
+        match args.command:
+            case "install":
+                install_mode(args.target)
+            case "backup": 
+                parse_backup_arguments()
+            case "restart":
+                parse_restart_arguments()
+            case "chunk":
+                parse_chunk_arguments()
+            case "ban":
+                ban.console_ban_handler(args.file)
+            case _:
+                parse_misc_or_no_arguments()
+    except (KeyboardInterrupt, SystemExit):
+        print("Cancelling")
 
 def install_mode(service):
     print("Starting install mode")
@@ -107,7 +111,7 @@ def parse_misc_or_no_arguments():
     elif args.report:
         report.crash_report()
     else:
-        print("empty")
+        parser.print_help()
 
 if __name__ == '__main__':
     main()
