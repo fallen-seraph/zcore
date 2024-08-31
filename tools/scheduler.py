@@ -31,8 +31,9 @@ def truncate_date_as_string():
 
 def get_date_of_backup_period_start():
     dateObjectAsTZ = get_date_from_configred_tz()
-    return (dateObjectAsTZ - timedelta(days=configuredTimeZone)).strftime(
-        "%d_%m_%Y")
+    return (
+        dateObjectAsTZ - timedelta(days=config.backupRetentionDays)
+    ).strftime("%d_%m_%Y")
 
 def trigger_restart_type(activeHours):
         currentTime = datetime.now(pytz.utc)
