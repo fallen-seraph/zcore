@@ -1,9 +1,9 @@
 class MessageHandler:
     def __init__(self, message):
         self.message = self.default_message(message)
-        self.baseMessage = f"Restarting the server for {message}"
+        self.baseMessage = f"Restarting the server for {self.message}"
 
-    def default_message(message):
+    def default_message(self, message):
         if not message:
             message = "a scheduled reboot"
         return message
